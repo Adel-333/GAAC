@@ -1,4 +1,4 @@
-<!DOCTYPE html>
+﻿<!DOCTYPE html>
 <html lang="en">
   <head>
     <meta charset="UTF-8" />
@@ -238,6 +238,44 @@
         color: var(--muted);
       }
 
+      .lb-tabs {
+        display: flex;
+        gap: 8px;
+        margin-bottom: 18px;
+        border-bottom: 1px solid rgba(255, 255, 255, 0.12);
+        padding-bottom: 12px;
+        flex-wrap: wrap;
+      }
+      .lb-tab {
+        font-family: var(--font-orbitron);
+        font-size: 0.8rem;
+        font-weight: 700;
+        letter-spacing: 0.08em;
+        text-transform: uppercase;
+        color: var(--muted);
+        background: rgba(255, 255, 255, 0.04);
+        border: 1px solid rgba(255, 255, 255, 0.1);
+        border-radius: 999px;
+        padding: 9px 20px;
+        cursor: pointer;
+        transition: all 0.2s ease;
+      }
+      .lb-tab:hover { color: var(--white); border-color: rgba(38, 183, 255, 0.35); }
+      .lb-tab.active {
+        color: var(--white);
+        background: linear-gradient(135deg, rgba(38, 183, 255, 0.2), rgba(38, 183, 255, 0.08));
+        border-color: rgba(38, 183, 255, 0.55);
+        box-shadow: 0 0 16px rgba(38, 183, 255, 0.18);
+      }
+      .lb-panel { width: 100%; }
+      .lb-panel.hidden { display: none !important; }
+      .lb-tab-note {
+        font-size: 0.78rem;
+        color: var(--muted);
+        margin-top: 10px;
+        text-align: center;
+      }
+
     </style>
   </head>
   <body class="page-ambassador">
@@ -258,6 +296,7 @@
         <a href="timeline">Timeline</a>
         <a href="partners">Partners</a>
         <a href="awards">Awards</a>
+        <a href="leaderboard">Results</a>
         <a class="active" href="ambassador">Ambassador</a>
         <div class="mobile-ctas">
           <a class="nav-cta" href="register">Register</a>
@@ -304,6 +343,9 @@
               <p style="text-align:center; margin-top:22px; font-size:0.85rem; color: var(--muted);">
                 Already an ambassador? <a href="ambassador-login" style="color: var(--blue-light);">Login here</a>.
               </p>
+              <div style="text-align:center; margin-top:18px;">
+                <a href="ambassador-login" class="button primary" style="text-decoration:none;">Log In to Dashboard</a>
+              </div>
             </div>
 
             <div id="success-state" class="success-state hidden">
@@ -378,18 +420,44 @@
             <p>Loading leaderboard...</p>
           </div>
           <div id="lb-content" class="hidden">
-            <div class="lb-table-scroll">
-            <table class="leaderboard-table">
-              <thead>
-                <tr>
-                  <th>Rank</th>
-                  <th>Name</th>
-                  <th>Country</th>
-                  <th style="text-align: right;">Referrals</th>
-                </tr>
-              </thead>
-              <tbody id="lb-body"></tbody>
-            </table>
+            <div class="lb-tabs" id="lbTabs">
+              <button type="button" class="lb-tab active" data-lbtab="referrals">Registered</button>
+              <button type="button" class="lb-tab" data-lbtab="active">Active</button>
+            </div>
+
+            <div class="lb-panel" data-lbpanel="referrals">
+              <div class="lb-table-scroll">
+                <table class="leaderboard-table">
+                  <thead>
+                    <tr>
+                      <th>Rank</th>
+                      <th>Name</th>
+                      <th>Country</th>
+                      <th style="text-align: right;">Referrals</th>
+                    </tr>
+                  </thead>
+                  <tbody id="lb-body"></tbody>
+                </table>
+              </div>
+              <p class="lb-tab-note">Ranked by total students registered.</p>
+            </div>
+
+            <div class="lb-panel hidden" data-lbpanel="active">
+              <div class="lb-table-scroll">
+                <table class="leaderboard-table">
+                  <thead>
+                    <tr>
+                      <th>Rank</th>
+                      <th>Name</th>
+                      <th>Country</th>
+                      <th style="text-align: right;">Active Students</th>
+                      <th style="text-align: right;">Active Teams</th>
+                    </tr>
+                  </thead>
+                  <tbody id="lb-body-active"></tbody>
+                </table>
+              </div>
+              <p class="lb-tab-note">Ranked by participants who actually took the Round 1 exam.</p>
             </div>
           </div>
           <div id="lb-empty" class="leaderboard-empty hidden">
@@ -436,6 +504,7 @@
 </footer>
 
     <script src="script.js"></script>
+    <script src="ambassador_cert_data.js"></script>
     <script type="module">
       import { initializeApp } from "https://www.gstatic.com/firebasejs/10.12.2/firebase-app.js";
       import { getAuth, createUserWithEmailAndPassword } from "https://www.gstatic.com/firebasejs/10.12.2/firebase-auth.js";
@@ -472,6 +541,11 @@
             return;
           }
           content.classList.remove('hidden');
+
+          // Fill the Active tab from the embedded verified dataset if reachable,
+          // otherwise fall back to the Firestore snapshot rows below.
+          loadActiveLeaderboard(content);
+
           let rank = 1;
           snapshot.forEach(doc => {
             const data = doc.data();
@@ -490,14 +564,56 @@
         } catch (e) {
           console.error("Leaderboard error:", e);
           loader.classList.add('hidden');
-          error.classList.remove('hidden');
+          // Keep the Active tab usable from the embedded dataset even if Firestore fails.
+          const hasEmbedded = (window.GAAC_AMBASSADOR_LEADERBOARD || []).length > 0;
+          const tbodyActive = document.getElementById('lb-body-active');
+          if (hasEmbedded && tbodyActive) {
+            content.classList.remove('hidden');
+            loadActiveLeaderboard(content);
+          } else {
+            error.classList.remove('hidden');
+          }
         }
+      }
+
+      function loadActiveLeaderboard(contentWrap) {
+        const tbodyActive = document.getElementById('lb-body-active');
+        if (!tbodyActive) return;
+        const lb = window.GAAC_AMBASSADOR_LEADERBOARD || [];
+        if (!lb.length) return;
+        const sorted = lb.slice().sort((a, b) => (b.activeParticipants || 0) - (a.activeParticipants || 0));
+        const top = sorted.slice(0, 15);
+        tbodyActive.innerHTML = '';
+        top.forEach((a, i) => {
+          const tr = document.createElement('tr');
+          if (i < 3) tr.className = `rank-${i + 1}`;
+          tr.innerHTML = `
+            <td class="rank-num">#${i + 1}</td>
+            <td class="name-cell">${a.name || 'Unknown'}${a.school ? `<br><span class="school-name">${a.school}</span>` : ''}</td>
+            <td style="color: var(--muted);">${a.country || '--'}</td>
+            <td class="points-col">${a.activeParticipants || 0}</td>
+            <td class="points-col">${a.activeTeams || 0}</td>
+          `;
+          tbodyActive.appendChild(tr);
+        });
+
+        // Tab switching (only once the wrapper is visible)
+        const tabs = contentWrap.querySelectorAll('.lb-tab');
+        const panels = contentWrap.querySelectorAll('.lb-panel');
+        tabs.forEach(tab => {
+          tab.addEventListener('click', () => {
+            tabs.forEach(t => t.classList.remove('active'));
+            tab.classList.add('active');
+            const target = tab.getAttribute('data-lbtab');
+            panels.forEach(p => p.classList.toggle('hidden', p.getAttribute('data-lbpanel') !== target));
+          });
+        });
       }
       loadLeaderboard();
 
       // --- COUNTRIES ---
       const countries = [
-        "Afghanistan", "Albania", "Algeria", "Andorra", "Angola", "Antigua and Barbuda", "Argentina", "Armenia", "Australia", "Austria", "Azerbaijan", "Bahamas", "Bahrain", "Bangladesh", "Barbados", "Belarus", "Belgium", "Belize", "Benin", "Bhutan", "Bolivia", "Bosnia and Herzegovina", "Botswana", "Brazil", "Brunei", "Bulgaria", "Burkina Faso", "Burundi", "Côte d'Ivoire", "Cabo Verde", "Cambodia", "Cameroon", "Canada", "Central African Republic", "Chad", "Chile", "China", "Colombia", "Comoros", "Congo", "Costa Rica", "Croatia", "Cuba", "Cyprus", "Czechia", "Denmark", "Djibouti", "Dominica", "Dominican Republic", "Ecuador", "Egypt", "El Salvador", "Equatorial Guinea", "Eritrea", "Estonia", "Eswatini", "Ethiopia", "Fiji", "Finland", "France", "Gabon", "Gambia", "Georgia", "Germany", "Ghana", "Greece", "Grenada", "Guatemala", "Guinea", "Guinea-Bissau", "Guyana", "Haiti", "Holy See", "Honduras", "Hungary", "Iceland", "India", "Indonesia", "Iran", "Iraq", "Ireland", "Israel", "Italy", "Jamaica", "Japan", "Jordan", "Kazakhstan", "Kenya", "Kiribati", "Kuwait", "Kyrgyzstan", "Laos", "Latvia", "Lebanon", "Lesotho", "Liberia", "Libya", "Liechtenstein", "Lithuania", "Luxembourg", "Madagascar", "Malawi", "Malaysia", "Maldives", "Mali", "Malta", "Marshall Islands", "Mauritania", "Mauritius", "Mexico", "Micronesia", "Moldova", "Monaco", "Mongolia", "Montenegro", "Morocco", "Mozambique", "Myanmar", "Namibia", "Nauru", "Nepal", "Netherlands", "New Zealand", "Nicaragua", "Niger", "Nigeria", "North Korea", "North Macedonia", "Norway", "Oman", "Pakistan", "Palau", "Palestine State", "Panama", "Papua New Guinea", "Paraguay", "Peru", "Philippines", "Poland", "Portugal", "Qatar", "Romania", "Russia", "Rwanda", "Saint Kitts and Nevis", "Saint Lucia", "Saint Vincent and the Grenadines", "Samoa", "San Marino", "Sao Tome and Principe", "Saudi Arabia", "Senegal", "Serbia", "Seychelles", "Sierra Leone", "Singapore", "Slovakia", "Slovenia", "Solomon Islands", "Somalia", "South Africa", "South Korea", "South Sudan", "Spain", "Sri Lanka", "Sudan", "Suriname", "Sweden", "Switzerland", "Syria", "Taiwan", "Tajikistan", "Tanzania", "Thailand", "Timor-Leste", "Togo", "Tonga", "Trinidad and Tobago", "Tunisia", "Turkey", "Turkmenistan", "Tuvalu", "Uganda", "Ukraine", "United Arab Emirates", "United Kingdom", "United States", "Uruguay", "Uzbekistan", "Vanuatu", "Vatican City", "Venezuela", "Vietnam", "Yemen", "Zambia", "Zimbabwe"
+        "Afghanistan", "Albania", "Algeria", "Andorra", "Angola", "Antigua and Barbuda", "Argentina", "Armenia", "Australia", "Austria", "Azerbaijan", "Bahamas", "Bahrain", "Bangladesh", "Barbados", "Belarus", "Belgium", "Belize", "Benin", "Bhutan", "Bolivia", "Bosnia and Herzegovina", "Botswana", "Brazil", "Brunei", "Bulgaria", "Burkina Faso", "Burundi", "CÃ´te d'Ivoire", "Cabo Verde", "Cambodia", "Cameroon", "Canada", "Central African Republic", "Chad", "Chile", "China", "Colombia", "Comoros", "Congo", "Costa Rica", "Croatia", "Cuba", "Cyprus", "Czechia", "Denmark", "Djibouti", "Dominica", "Dominican Republic", "Ecuador", "Egypt", "El Salvador", "Equatorial Guinea", "Eritrea", "Estonia", "Eswatini", "Ethiopia", "Fiji", "Finland", "France", "Gabon", "Gambia", "Georgia", "Germany", "Ghana", "Greece", "Grenada", "Guatemala", "Guinea", "Guinea-Bissau", "Guyana", "Haiti", "Holy See", "Honduras", "Hungary", "Iceland", "India", "Indonesia", "Iran", "Iraq", "Ireland", "Israel", "Italy", "Jamaica", "Japan", "Jordan", "Kazakhstan", "Kenya", "Kiribati", "Kuwait", "Kyrgyzstan", "Laos", "Latvia", "Lebanon", "Lesotho", "Liberia", "Libya", "Liechtenstein", "Lithuania", "Luxembourg", "Madagascar", "Malawi", "Malaysia", "Maldives", "Mali", "Malta", "Marshall Islands", "Mauritania", "Mauritius", "Mexico", "Micronesia", "Moldova", "Monaco", "Mongolia", "Montenegro", "Morocco", "Mozambique", "Myanmar", "Namibia", "Nauru", "Nepal", "Netherlands", "New Zealand", "Nicaragua", "Niger", "Nigeria", "North Korea", "North Macedonia", "Norway", "Oman", "Pakistan", "Palau", "Palestine State", "Panama", "Papua New Guinea", "Paraguay", "Peru", "Philippines", "Poland", "Portugal", "Qatar", "Romania", "Russia", "Rwanda", "Saint Kitts and Nevis", "Saint Lucia", "Saint Vincent and the Grenadines", "Samoa", "San Marino", "Sao Tome and Principe", "Saudi Arabia", "Senegal", "Serbia", "Seychelles", "Sierra Leone", "Singapore", "Slovakia", "Slovenia", "Solomon Islands", "Somalia", "South Africa", "South Korea", "South Sudan", "Spain", "Sri Lanka", "Sudan", "Suriname", "Sweden", "Switzerland", "Syria", "Taiwan", "Tajikistan", "Tanzania", "Thailand", "Timor-Leste", "Togo", "Tonga", "Trinidad and Tobago", "Tunisia", "Turkey", "Turkmenistan", "Tuvalu", "Uganda", "Ukraine", "United Arab Emirates", "United Kingdom", "United States", "Uruguay", "Uzbekistan", "Vanuatu", "Vatican City", "Venezuela", "Vietnam", "Yemen", "Zambia", "Zimbabwe"
       ];
       const dataList = document.getElementById('country-list');
       if (dataList) {

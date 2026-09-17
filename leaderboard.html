@@ -1,0 +1,1363 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>GAAC 2026 Official Leaderboard | Top Finalists & Honors</title>
+  <link rel="icon" href="images/GAAC Dark.jpg" type="image/jpeg" />
+
+  <!-- Google Fonts -->
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+  <link href="https://fonts.googleapis.com/css2?family=Orbitron:wght@600;700;800;900&family=Inter:wght@400;500;600;700;800;900&display=swap" rel="stylesheet" />
+  <link rel="stylesheet" href="styles.css" />
+  <link rel="stylesheet" href="registration.css" />
+
+  <style>
+    body {
+      min-height: 100vh;
+      display: flex;
+      flex-direction: column;
+    }
+    .lb-wrapper {
+      flex: 1;
+      padding: 40px 20px 80px;
+      max-width: 1100px;
+      margin: 0 auto;
+      width: 100%;
+    }
+
+    /* Hero Section */
+    .lb-hero {
+      text-align: center;
+      margin-bottom: 44px;
+    }
+    .lb-hero .eyebrow {
+      font-family: var(--font-orbitron);
+      font-size: 0.8rem;
+      letter-spacing: 0.2em;
+      text-transform: uppercase;
+      color: var(--blue-light);
+      margin-bottom: 8px;
+    }
+    .lb-hero h1 {
+      font-size: 2.3rem;
+      margin-bottom: 12px;
+      font-weight: 800;
+    }
+    .lb-hero p {
+      color: var(--silver);
+      font-size: 0.95rem;
+      max-width: 680px;
+      margin: 0 auto;
+    }
+
+    /* Olympic Podium Pedestals ("مصاطب التتويج") */
+    .podium-section {
+      margin-bottom: 56px;
+    }
+    .podium-heading {
+      text-align: center;
+      margin-bottom: 28px;
+    }
+    .podium-heading h2 {
+      font-size: 1.35rem;
+      color: var(--white);
+      margin-bottom: 4px;
+    }
+    .podium-heading p {
+      color: var(--muted);
+      font-size: 0.85rem;
+    }
+
+    .podium-steps-wrap {
+      display: grid;
+      grid-template-columns: 1fr 1.15fr 1fr;
+      align-items: flex-end;
+      gap: 16px;
+      max-width: 960px;
+      margin: 0 auto;
+    }
+    @media (max-width: 768px) {
+      .podium-steps-wrap {
+        grid-template-columns: 1fr;
+        gap: 24px;
+      }
+    }
+
+    .podium-col {
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+    }
+    @media (max-width: 768px) {
+      .podium-col.rank-1-col { order: 1; }
+      .podium-col.rank-2-col { order: 2; }
+      .podium-col.rank-3-col { order: 3; }
+    }
+
+    .podium-card {
+      width: 100%;
+      background: rgba(10, 14, 23, 0.7);
+      border: 1px solid rgba(255, 255, 255, 0.12);
+      border-radius: 14px 14px 0 0;
+      padding: 22px 16px 18px;
+      text-align: center;
+      backdrop-filter: blur(12px);
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      position: relative;
+      transition: all 0.2s ease;
+      z-index: 2;
+    }
+    @media (max-width: 768px) {
+      .podium-card { border-radius: 14px; }
+    }
+
+    .podium-card.gold {
+      border-color: rgba(255, 215, 0, 0.5);
+      background: linear-gradient(180deg, rgba(255, 215, 0, 0.12) 0%, rgba(10, 18, 30, 0.85) 100%);
+      box-shadow: 0 -8px 24px rgba(255, 215, 0, 0.15);
+    }
+    .podium-card.silver {
+      border-color: rgba(203, 213, 225, 0.4);
+      background: linear-gradient(180deg, rgba(203, 213, 225, 0.08) 0%, rgba(10, 18, 30, 0.85) 100%);
+    }
+    .podium-card.bronze {
+      border-color: rgba(217, 119, 6, 0.4);
+      background: linear-gradient(180deg, rgba(217, 119, 6, 0.08) 0%, rgba(10, 18, 30, 0.85) 100%);
+    }
+
+    .podium-rank-badge {
+      font-family: var(--font-orbitron);
+      font-weight: 900;
+      font-size: 1.9rem;
+      line-height: 1;
+      margin-bottom: 10px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      gap: 6px;
+    }
+    .podium-card.gold .podium-rank-badge { color: #ffd700; }
+    .podium-card.silver .podium-rank-badge { color: #e2e8f0; }
+    .podium-card.bronze .podium-rank-badge { color: #fb923c; }
+    .podium-card h3 {
+      font-family: var(--font-orbitron);
+      font-size: 1rem;
+      color: var(--white);
+      margin-bottom: 6px;
+      letter-spacing: 0.03em;
+      word-break: break-word;
+    }
+    .podium-card.gold h3 { color: #ffd700; font-size: 1.1rem; }
+    .podium-card.silver h3 { color: #e2e8f0; }
+    .podium-card.bronze h3 { color: #fb923c; }
+
+    .podium-award {
+      font-size: 0.7rem;
+      font-weight: 700;
+      letter-spacing: 0.08em;
+      text-transform: uppercase;
+      padding: 3px 10px;
+      border-radius: 999px;
+      margin-bottom: 10px;
+      display: inline-block;
+    }
+    .podium-card.gold .podium-award { background: rgba(255, 215, 0, 0.18); color: #ffd700; border: 1px solid rgba(255, 215, 0, 0.4); }
+    .podium-card.silver .podium-award { background: rgba(203, 213, 225, 0.18); color: #e2e8f0; border: 1px solid rgba(203, 213, 225, 0.4); }
+    .podium-card.bronze .podium-award { background: rgba(217, 119, 6, 0.18); color: #fb923c; border: 1px solid rgba(217, 119, 6, 0.4); }
+
+    .podium-country {
+      font-size: 0.86rem;
+      color: var(--silver);
+      margin-bottom: 12px;
+      display: inline-flex;
+      align-items: center;
+      gap: 6px;
+    }
+
+    .podium-members {
+      width: 100%;
+      border-top: 1px solid rgba(255, 255, 255, 0.08);
+      padding-top: 10px;
+      font-size: 0.82rem;
+      color: var(--white);
+      font-weight: 600;
+      line-height: 1.5;
+    }
+
+    .pedestal-step {
+      width: 100%;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      justify-content: center;
+      border-radius: 0 0 14px 14px;
+      font-family: var(--font-orbitron);
+      font-weight: 900;
+      letter-spacing: 0.05em;
+      position: relative;
+      border: 1px solid rgba(255, 255, 255, 0.12);
+      border-top: none;
+    }
+    @media (max-width: 768px) {
+      .pedestal-step { display: none; }
+    }
+
+    .step-1 {
+      height: 150px;
+      background: linear-gradient(180deg, rgba(255, 215, 0, 0.25) 0%, rgba(184, 134, 11, 0.4) 100%);
+      border-color: rgba(255, 215, 0, 0.5);
+      color: #ffd700;
+      font-size: 3.5rem;
+      box-shadow: 0 10px 30px rgba(255, 215, 0, 0.15);
+    }
+    .step-2 {
+      height: 110px;
+      background: linear-gradient(180deg, rgba(203, 213, 225, 0.18) 0%, rgba(100, 116, 139, 0.35) 100%);
+      border-color: rgba(203, 213, 225, 0.4);
+      color: #e2e8f0;
+      font-size: 3rem;
+    }
+    .step-3 {
+      height: 80px;
+      background: linear-gradient(180deg, rgba(217, 119, 6, 0.18) 0%, rgba(120, 53, 15, 0.35) 100%);
+      border-color: rgba(217, 119, 6, 0.4);
+      color: #fb923c;
+      font-size: 2.6rem;
+    }
+
+    .pedestal-label {
+      font-size: 0.68rem;
+      letter-spacing: 0.15em;
+      text-transform: uppercase;
+      font-weight: 700;
+      opacity: 0.85;
+      margin-top: -6px;
+    }
+
+    /* Standings Table */
+    .standings-section {
+      margin-top: 10px;
+    }
+    .standings-bar {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      gap: 16px;
+      margin-bottom: 20px;
+      flex-wrap: wrap;
+    }
+    .standings-title {
+      font-family: var(--font-orbitron);
+      font-size: 1.2rem;
+      font-weight: 700;
+      color: var(--white);
+    }
+    .standings-count {
+      font-size: 0.82rem;
+      color: var(--muted);
+    }
+
+    /* Professional loading state */
+    .lb-row-skeleton { display: flex; gap: 14px; align-items: center; padding: 16px 18px; }
+    .lb-sk {
+      position: relative;
+      overflow: hidden;
+      background: rgba(255, 255, 255, 0.06);
+      border-radius: 8px;
+    }
+    .lb-sk::after {
+      content: '';
+      position: absolute;
+      inset: 0;
+      transform: translateX(-100%);
+      background: linear-gradient(90deg, transparent, rgba(255, 255, 255, 0.09), transparent);
+      animation: lbShimmer 1.4s infinite;
+    }
+    @keyframes lbShimmer { 100% { transform: translateX(100%); } }
+    .lb-sk-rank { width: 46px; height: 20px; }
+    .lb-sk-team { flex: 1; height: 20px; max-width: 320px; }
+    .lb-sk-country { width: 120px; height: 20px; }
+    .lb-sk-award { width: 150px; height: 20px; }
+    .lb-loading-row {
+      display: flex; align-items: center; gap: 14px; width: 100%;
+    }
+    .lb-podium-loader {
+      display: flex; justify-content: center; gap: 18px; align-items: flex-end;
+      padding: 18px 0 4px;
+    }
+    .lb-podium-sk {
+      width: 200px; height: 150px; border-radius: 14px;
+      position: relative; overflow: hidden;
+      background: rgba(255, 255, 255, 0.05);
+    }
+    .lb-podium-sk::after {
+      content: ''; position: absolute; inset: 0;
+      transform: translateX(-100%);
+      background: linear-gradient(90deg, transparent, rgba(255, 255, 255, 0.09), transparent);
+      animation: lbShimmer 1.4s infinite;
+    }
+    .lb-podium-sk-tall { height: 190px; }
+    .lb-status-note {
+      display: inline-flex; align-items: center; gap: 10px;
+      color: var(--muted); font-size: 0.84rem;
+    }
+    .lb-status-note .lb-spinner {
+      width: 16px; height: 16px; border-radius: 50%;
+      border: 2px solid rgba(38, 183, 255, 0.25);
+      border-top-color: var(--blue-light);
+      animation: lbSpin 0.7s linear infinite;
+    }
+    @keyframes lbSpin { to { transform: rotate(360deg); } }
+
+    .search-input {
+      background: rgba(10, 14, 23, 0.7);
+      border: 1px solid rgba(38, 183, 255, 0.25);
+      border-radius: 10px;
+      padding: 10px 16px;
+      color: var(--white);
+      font-family: var(--font-b);
+      font-size: 0.88rem;
+      outline: none;
+      width: 340px;
+      max-width: 100%;
+      transition: all 0.2s ease;
+    }
+    .search-input:focus {
+      border-color: var(--blue-light);
+      box-shadow: 0 0 12px rgba(38, 183, 255, 0.25);
+    }
+
+    .leaderboard-card {
+      background: rgba(10, 14, 23, 0.6);
+      border: 1px solid rgba(255, 255, 255, 0.1);
+      border-radius: 16px;
+      padding: 24px;
+      backdrop-filter: blur(12px);
+    }
+
+    .lb-table-scroll {
+      overflow-x: auto;
+      -webkit-overflow-scrolling: touch;
+    }
+
+    .leaderboard-table {
+      width: 100%;
+      border-collapse: collapse;
+      text-align: left;
+    }
+    .leaderboard-table th {
+      padding: 14px 16px;
+      font-family: var(--font-orbitron);
+      font-size: 0.75rem;
+      letter-spacing: 0.1em;
+      color: var(--muted);
+      border-bottom: 1px solid rgba(255, 255, 255, 0.1);
+      text-transform: uppercase;
+    }
+    .leaderboard-table td {
+      padding: 16px 16px;
+      border-bottom: 1px solid rgba(255, 255, 255, 0.06);
+      color: var(--white);
+      font-size: 0.92rem;
+      vertical-align: middle;
+    }
+
+    .team-row {
+      cursor: pointer;
+      transition: background 0.15s ease;
+    }
+    .team-row:hover td {
+      background: rgba(38, 183, 255, 0.05);
+    }
+    .team-row.expanded td {
+      background: rgba(38, 183, 255, 0.08);
+      border-bottom-color: transparent;
+    }
+
+    .rank-num {
+      font-family: var(--font-orbitron);
+      font-weight: 800;
+      font-size: 0.95rem;
+      color: var(--blue-light);
+    }
+    .rank-num.r-1 { color: #ffd700; font-size: 1.1rem; }
+    .rank-num.r-2 { color: #e2e8f0; font-size: 1.05rem; }
+    .rank-num.r-3 { color: #fb923c; font-size: 1.05rem; }
+
+    .team-name-cell {
+      font-weight: 700;
+      font-size: 0.96rem;
+      color: var(--white);
+    }
+
+    .country-cell {
+      color: var(--silver);
+      display: inline-flex;
+      align-items: center;
+      gap: 8px;
+      font-size: 0.88rem;
+    }
+    .flag-img {
+      width: 20px;
+      height: 14px;
+      object-fit: cover;
+      border-radius: 2px;
+      box-shadow: 0 1px 3px rgba(0,0,0,0.4);
+      display: inline-block;
+    }
+
+    .award-tag {
+      font-size: 0.72rem;
+      font-weight: 700;
+      letter-spacing: 0.06em;
+      text-transform: uppercase;
+      padding: 3px 10px;
+      border-radius: 6px;
+      display: inline-block;
+    }
+    .tag-gold { background: rgba(255, 215, 0, 0.14); color: #ffd700; border: 1px solid rgba(255, 215, 0, 0.35); }
+    .tag-silver { background: rgba(203, 213, 225, 0.14); color: #e2e8f0; border: 1px solid rgba(203, 213, 225, 0.3); }
+    .tag-bronze { background: rgba(217, 119, 6, 0.14); color: #fb923c; border: 1px solid rgba(217, 119, 6, 0.35); }
+    .tag-blue { background: rgba(38, 183, 255, 0.12); color: var(--blue-light); border: 1px solid rgba(38, 183, 255, 0.3); }
+
+    /* Accordion Details (Natural, no weird label: text) */
+    .accordion-row {
+      display: none;
+    }
+    .accordion-row.open {
+      display: table-row;
+    }
+    .accordion-box {
+      padding: 16px 20px 20px;
+      background: rgba(5, 8, 16, 0.85);
+      border-bottom: 1px solid rgba(38, 183, 255, 0.2);
+    }
+
+    .acc-grid {
+      display: grid;
+      gap: 12px;
+      margin-top: 8px;
+    }
+
+    .acc-card {
+      background: rgba(15, 23, 42, 0.6);
+      border: 1px solid rgba(255, 255, 255, 0.08);
+      border-radius: 10px;
+      padding: 12px 16px;
+    }
+    .acc-card-top {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      gap: 10px;
+      flex-wrap: wrap;
+      margin-bottom: 4px;
+    }
+    .acc-name {
+      font-weight: 700;
+      color: var(--white);
+      font-size: 0.92rem;
+    }
+    .acc-role {
+      font-size: 0.68rem;
+      text-transform: uppercase;
+      letter-spacing: 0.06em;
+      color: var(--blue-light);
+      background: rgba(38, 183, 255, 0.1);
+      padding: 2px 8px;
+      border-radius: 999px;
+      border: 1px solid rgba(38, 183, 255, 0.25);
+    }
+    .acc-meta {
+      font-size: 0.82rem;
+      color: var(--silver);
+      display: flex;
+      align-items: center;
+      gap: 16px;
+      flex-wrap: wrap;
+    }
+    .acc-school {
+      display: inline-flex;
+      align-items: center;
+      gap: 6px;
+    }
+
+    .expand-arrow {
+      font-size: 0.8rem;
+      color: var(--muted);
+      transition: transform 0.2s ease;
+      display: inline-block;
+    }
+    .team-row.expanded .expand-arrow {
+      transform: rotate(180deg);
+      color: var(--blue-light);
+    }
+
+    .lb-error {
+      text-align: center;
+      color: var(--muted);
+      padding: 40px 16px;
+      font-size: 0.92rem;
+    }
+    .lb-error strong { color: var(--white); display: block; margin-bottom: 6px; }
+  
+    
+    /* Results & Papers Navigation */
+    .results-view-nav {
+      display: flex;
+      justify-content: center;
+      gap: 10px;
+      margin: 0 auto 36px;
+      max-width: 520px;
+      background: rgba(10, 14, 23, 0.85);
+      border: 1px solid rgba(255, 255, 255, 0.1);
+      padding: 5px;
+      border-radius: 12px;
+      backdrop-filter: blur(16px);
+    }
+    .res-nav-btn {
+      flex: 1;
+      display: inline-flex;
+      align-items: center;
+      justify-content: center;
+      gap: 8px;
+      font-family: var(--font-orbitron);
+      font-size: 0.78rem;
+      font-weight: 700;
+      letter-spacing: 0.05em;
+      text-transform: uppercase;
+      color: var(--muted);
+      background: transparent;
+      border: 1px solid transparent;
+      border-radius: 8px;
+      padding: 10px 16px;
+      cursor: pointer;
+      transition: all 0.2s ease;
+      text-decoration: none;
+    }
+    .res-nav-btn:hover {
+      color: var(--white);
+      background: rgba(255, 255, 255, 0.04);
+    }
+    .res-nav-btn.active {
+      color: var(--white);
+      background: rgba(38, 183, 255, 0.15);
+      border-color: rgba(38, 183, 255, 0.4);
+      box-shadow: 0 0 16px rgba(38, 183, 255, 0.15);
+    }
+    .res-nav-btn svg {
+      width: 15px;
+      height: 15px;
+      flex-shrink: 0;
+    }
+
+    /* Tab views */
+    .tab-view-content {
+      transition: opacity 0.2s ease;
+    }
+    .tab-view-content.hidden {
+      display: none !important;
+    }
+
+    /* Papers Archive Section */
+    .papers-header {
+      text-align: center;
+      margin-bottom: 36px;
+    }
+    .papers-header h2 {
+      font-size: 1.45rem;
+      color: var(--white);
+      margin-bottom: 6px;
+      font-family: var(--font-orbitron);
+    }
+    .papers-header p {
+      color: var(--silver);
+      font-size: 0.88rem;
+      max-width: 620px;
+      margin: 0 auto;
+    }
+
+    .papers-archive-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(320px, 1fr));
+      gap: 20px;
+      max-width: 1060px;
+      margin: 0 auto;
+    }
+
+    .exam-paper-box {
+      background: linear-gradient(160deg, rgba(16, 25, 45, 0.9), rgba(10, 14, 23, 0.95));
+      border: 1px solid rgba(255, 255, 255, 0.08);
+      border-radius: 14px;
+      padding: 24px 22px;
+      display: flex;
+      flex-direction: column;
+      justify-content: space-between;
+      position: relative;
+      overflow: hidden;
+      transition: border-color 0.2s ease, transform 0.2s ease;
+    }
+    .exam-paper-box:hover {
+      border-color: rgba(38, 183, 255, 0.4);
+      transform: translateY(-2px);
+    }
+    .exam-paper-box::before {
+      content: '';
+      position: absolute;
+      top: 0;
+      left: 0;
+      right: 0;
+      height: 2px;
+      background: linear-gradient(90deg, transparent, var(--blue-light), transparent);
+      opacity: 0.6;
+    }
+
+    .paper-stage-row {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      margin-bottom: 14px;
+    }
+    .paper-stage-badge {
+      font-family: var(--font-orbitron);
+      font-size: 0.7rem;
+      font-weight: 700;
+      letter-spacing: 0.08em;
+      text-transform: uppercase;
+      color: var(--blue-light);
+      background: rgba(38, 183, 255, 0.08);
+      border: 1px solid rgba(38, 183, 255, 0.25);
+      padding: 4px 10px;
+      border-radius: 6px;
+    }
+    .paper-idx {
+      font-family: var(--font-orbitron);
+      font-size: 0.8rem;
+      font-weight: 800;
+      color: rgba(255, 255, 255, 0.25);
+      letter-spacing: 0.05em;
+    }
+
+    .paper-main-title {
+      font-family: var(--font-orbitron);
+      font-size: 1.05rem;
+      font-weight: 700;
+      color: var(--white);
+      margin: 0 0 8px 0;
+      line-height: 1.4;
+    }
+    .paper-sub-desc {
+      font-size: 0.84rem;
+      color: var(--silver);
+      line-height: 1.55;
+      margin: 0 0 16px 0;
+    }
+
+    .paper-doc-info {
+      display: flex;
+      align-items: center;
+      gap: 12px;
+      font-size: 0.74rem;
+      color: var(--muted);
+      padding: 10px 0;
+      margin-bottom: 16px;
+      border-top: 1px solid rgba(255, 255, 255, 0.06);
+      border-bottom: 1px solid rgba(255, 255, 255, 0.06);
+    }
+    .paper-doc-info span {
+      display: inline-flex;
+      align-items: center;
+      gap: 5px;
+    }
+
+    .paper-action-buttons {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 10px;
+    }
+    .paper-btn {
+      display: inline-flex;
+      align-items: center;
+      justify-content: center;
+      gap: 6px;
+      padding: 9px 12px;
+      font-family: var(--font-orbitron);
+      font-size: 0.74rem;
+      font-weight: 700;
+      letter-spacing: 0.04em;
+      border-radius: 8px;
+      text-decoration: none;
+      transition: all 0.2s ease;
+      cursor: pointer;
+    }
+    .paper-btn-primary {
+      background: rgba(38, 183, 255, 0.15);
+      border: 1px solid rgba(38, 183, 255, 0.4);
+      color: var(--white);
+    }
+    .paper-btn-primary:hover {
+      background: var(--blue);
+      color: #000;
+      border-color: var(--blue);
+    }
+    .paper-btn-secondary {
+      background: rgba(255, 255, 255, 0.04);
+      border: 1px solid rgba(255, 255, 255, 0.12);
+      color: var(--silver);
+    }
+    .paper-btn-secondary:hover {
+      background: rgba(255, 255, 255, 0.1);
+      color: var(--white);
+      border-color: rgba(255, 255, 255, 0.25);
+    }
+
+  </style>
+</head>
+<body class="page-home">
+  <canvas class="space-canvas" data-space-canvas aria-hidden="true"></canvas>
+
+  <header class="site-header">
+    <a class="brand-lockup" href="index.html" aria-label="GAAC home">
+      <img class="brand-logo club-logo" src="images/Club_Logo_Black_BG-removebg-preview.png" alt="STEM October Astronomy Club logo" />
+      <span class="brand-divider" aria-hidden="true"></span>
+      <img class="brand-logo gaac-logo" src="images/GAAC_Final_logo_without_BG-removebg-preview.png" alt="GAAC logo" />
+    </a>
+    <button class="nav-toggle" type="button" aria-label="Open navigation" aria-expanded="false">
+      <span></span><span></span><span></span>
+    </button>
+    <nav class="site-nav" aria-label="Primary navigation">
+      <a href="index.html">Home</a>
+      <a href="leaderboard.html" class="active" id="nav-standings-link">Leaderboard</a>
+      <a href="#papers" id="nav-papers-link">Exam Papers</a>
+      <a href="team-dashboard.html">Dashboard</a>
+    </nav>
+  </header>
+
+  <main class="lb-wrapper">
+        <!-- Hero -->
+    <div class="lb-hero">
+      <p class="eyebrow">Global Astronomy &amp; Astrophysics Challenge</p>
+      <h1 id="hero-main-title">Official Competition Standings</h1>
+      <p id="hero-subtext">Official rankings and distinctions for the top 77 teams and honors in GAAC 2026.</p>
+    </div>
+
+    <!-- View Switcher Tabs -->
+    <div class="results-view-nav">
+      <button type="button" class="res-nav-btn active" id="tab-btn-standings" data-tab="standings">
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M6 9H4.5a2.5 2.5 0 0 1 0-5H6"></path><path d="M18 9h1.5a2.5 2.5 0 0 0 0-5H18"></path><path d="M4 22h16"></path><path d="M10 14.66V17c0 .55-.45 1-1 1H7c-.55 0-1-.45-1-1v-2.34"></path><path d="M18 14.66V17c0 .55-.45 1-1 1h-2c-.55 0-1-.45-1-1v-2.34"></path><path d="M6 4h12v5a6 6 0 0 1-12 0V4Z"></path></svg>
+        Standings
+      </button>
+      <button type="button" class="res-nav-btn" id="tab-btn-papers" data-tab="papers">
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"></path><polyline points="14 2 14 8 20 8"></polyline><line x1="16" y1="13" x2="8" y2="13"></line><line x1="16" y1="17" x2="8" y2="17"></line><polyline points="10 9 9 9 8 9"></polyline></svg>
+        Exam Papers &amp; Solutions
+      </button>
+    </div>
+
+    <!-- TAB 1: STANDINGS -->
+    <div class="tab-view-content" id="view-standings">
+
+    <!-- Olympic Podium ("مصاطب التتويج") -->
+    <section class="podium-section">
+      <div class="podium-heading">
+        <h2>Hall of Champions</h2>
+        <p>Top 3 Grand Finalist Teams</p>
+      </div>
+
+      <div class="podium-steps-wrap" id="podiumWrap">
+        <div style="grid-column:1/-1;" id="podiumLoading">
+          <div class="lb-podium-loader" aria-hidden="true">
+            <div class="lb-podium-sk"></div>
+            <div class="lb-podium-sk lb-podium-sk-tall"></div>
+            <div class="lb-podium-sk"></div>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- Standings Table Section -->
+    <section class="standings-section">
+      <div class="standings-bar">
+        <div>
+          <div class="standings-title">All Standings (1 – 77)</div>
+          <div class="standings-count" id="standingsCount">
+            <span class="lb-status-note"><span class="lb-spinner" aria-hidden="true"></span> Fetching official standings…</span>
+          </div>
+        </div>
+        <input
+          type="text"
+          id="searchBox"
+          class="search-input"
+          placeholder="Search team, country, member, school..."
+          autocomplete="off"
+        />
+      </div>
+
+      <div class="leaderboard-card">
+        <div class="lb-table-scroll">
+          <table class="leaderboard-table" id="leadTable">
+            <thead>
+              <tr>
+                <th style="width: 70px;">Rank</th>
+                <th>Team</th>
+                <th>Country</th>
+                <th>Award / Standing</th>
+                <th style="width: 40px; text-align: center;"></th>
+              </tr>
+            </thead>
+            <tbody id="leadBody">
+              <tr><td colspan="5" style="padding:0;"><div id="lbTableSkeleton">
+                <div class="lb-row-skeleton"><div class="lb-sk lb-sk-rank"></div><div class="lb-sk lb-sk-team"></div><div class="lb-sk lb-sk-country"></div><div class="lb-sk lb-sk-award"></div><div style="flex:0 0 40px;"></div></div>
+                <div class="lb-row-skeleton"><div class="lb-sk lb-sk-rank"></div><div class="lb-sk lb-sk-team"></div><div class="lb-sk lb-sk-country"></div><div class="lb-sk lb-sk-award"></div><div style="flex:0 0 40px;"></div></div>
+                <div class="lb-row-skeleton"><div class="lb-sk lb-sk-rank"></div><div class="lb-sk lb-sk-team"></div><div class="lb-sk lb-sk-country"></div><div class="lb-sk lb-sk-award"></div><div style="flex:0 0 40px;"></div></div>
+                <div class="lb-row-skeleton"><div class="lb-sk lb-sk-rank"></div><div class="lb-sk lb-sk-team"></div><div class="lb-sk lb-sk-country"></div><div class="lb-sk lb-sk-award"></div><div style="flex:0 0 40px;"></div></div>
+                <div class="lb-row-skeleton"><div class="lb-sk lb-sk-rank"></div><div class="lb-sk lb-sk-team"></div><div class="lb-sk lb-sk-country"></div><div class="lb-sk lb-sk-award"></div><div style="flex:0 0 40px;"></div></div>
+                <div class="lb-row-skeleton"><div class="lb-sk lb-sk-rank"></div><div class="lb-sk lb-sk-team"></div><div class="lb-sk lb-sk-country"></div><div class="lb-sk lb-sk-award"></div><div style="flex:0 0 40px;"></div></div>
+              </div></td></tr>
+            </tbody>
+          </table>
+        </div>
+      </div>
+    </section>
+          </div><!-- /view-standings -->
+
+    <!-- TAB 2: EXAM PAPERS & SOLUTIONS -->
+    <section class="tab-view-content hidden" id="view-papers">
+      <div class="papers-header">
+        <h2>Official Examination Papers &amp; Solutions</h2>
+        <p>Download and review official competition papers from the mock test to the Knockout Grand Finals.</p>
+      </div>
+
+      <div class="papers-archive-grid">
+        <!-- 01: Mock Test -->
+        <div class="exam-paper-box">
+          <div>
+            <div class="paper-stage-row">
+              <span class="paper-stage-badge">Mock Exam</span>
+              <span class="paper-idx">#01</span>
+            </div>
+            <h3 class="paper-main-title">GAAC 2026 Mock Examination</h3>
+            <p class="paper-sub-desc">Official mock examination covering preliminary celestial mechanics, observational astronomy, and foundational astrophysics.</p>
+            <div class="paper-doc-info">
+              <span><svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"></path></svg> PDF Document</span>
+              <span>•</span>
+              <span>Official Questions &amp; Solutions</span>
+            </div>
+          </div>
+          <div class="paper-action-buttons">
+            <a href="pdf/GAAC_2026_Mock_Test.pdf" download="GAAC_2026_Mock_Test.pdf" class="paper-btn paper-btn-primary">
+              <svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"></path><polyline points="7 10 12 15 17 10"></polyline><line x1="12" y1="15" x2="12" y2="3"></line></svg>
+              Download
+            </a>
+            <a href="pdf/GAAC_2026_Mock_Test.pdf" target="_blank" rel="noopener noreferrer" class="paper-btn paper-btn-secondary">
+              <svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M18 13v6a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2V8a2 2 0 0 1 2-2h6"></path><polyline points="15 3 21 3 21 9"></polyline><line x1="10" y1="14" x2="21" y2="3"></line></svg>
+              Preview
+            </a>
+          </div>
+        </div>
+
+        <!-- 02: Round 1 -->
+        <div class="exam-paper-box">
+          <div>
+            <div class="paper-stage-row">
+              <span class="paper-stage-badge">Round 1</span>
+              <span class="paper-idx">#02</span>
+            </div>
+            <h3 class="paper-main-title">GAAC 2026 Round 1 Official Paper</h3>
+            <p class="paper-sub-desc">Official preliminary examination paper featuring 40 comprehensive multiple-choice problems and complete academic solutions.</p>
+            <div class="paper-doc-info">
+              <span><svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"></path></svg> PDF Document</span>
+              <span>•</span>
+              <span>Official Questions &amp; Solutions</span>
+            </div>
+          </div>
+          <div class="paper-action-buttons">
+            <a href="pdf/GAAC_2026_Round_1.pdf" download="GAAC_2026_Round_1.pdf" class="paper-btn paper-btn-primary">
+              <svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"></path><polyline points="7 10 12 15 17 10"></polyline><line x1="12" y1="15" x2="12" y2="3"></line></svg>
+              Download
+            </a>
+            <a href="pdf/GAAC_2026_Round_1.pdf" target="_blank" rel="noopener noreferrer" class="paper-btn paper-btn-secondary">
+              <svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M18 13v6a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2V8a2 2 0 0 1 2-2h6"></path><polyline points="15 3 21 3 21 9"></polyline><line x1="10" y1="14" x2="21" y2="3"></line></svg>
+              Preview
+            </a>
+          </div>
+        </div>
+
+        <!-- 03: Round of 16 -->
+        <div class="exam-paper-box">
+          <div>
+            <div class="paper-stage-row">
+              <span class="paper-stage-badge">Round of 16</span>
+              <span class="paper-idx">#03</span>
+            </div>
+            <h3 class="paper-main-title">GAAC 2026 Round of 16 Official Paper</h3>
+            <p class="paper-sub-desc">Knockout qualification round problems testing orbital dynamics, stellar atmospheres, and analytical astrophysics.</p>
+            <div class="paper-doc-info">
+              <span><svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"></path></svg> PDF Document</span>
+              <span>•</span>
+              <span>Official Questions &amp; Solutions</span>
+            </div>
+          </div>
+          <div class="paper-action-buttons">
+            <a href="pdf/GAAC_2026_Round_of_16.pdf" download="GAAC_2026_Round_of_16.pdf" class="paper-btn paper-btn-primary">
+              <svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"></path><polyline points="7 10 12 15 17 10"></polyline><line x1="12" y1="15" x2="12" y2="3"></line></svg>
+              Download
+            </a>
+            <a href="pdf/GAAC_2026_Round_of_16.pdf" target="_blank" rel="noopener noreferrer" class="paper-btn paper-btn-secondary">
+              <svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M18 13v6a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2V8a2 2 0 0 1 2-2h6"></path><polyline points="15 3 21 3 21 9"></polyline><line x1="10" y1="14" x2="21" y2="3"></line></svg>
+              Preview
+            </a>
+          </div>
+        </div>
+
+        <!-- 04: Quarter-Finals (Round of 8) -->
+        <div class="exam-paper-box">
+          <div>
+            <div class="paper-stage-row">
+              <span class="paper-stage-badge">Quarter-Finals</span>
+              <span class="paper-idx">#04</span>
+            </div>
+            <h3 class="paper-main-title">Quarter-Finals (Round of 8) Paper</h3>
+            <p class="paper-sub-desc">Stage 1 knockout problem set determining top rankings with rigorous multi-step numerical and theoretical derivations.</p>
+            <div class="paper-doc-info">
+              <span><svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"></path></svg> PDF Document</span>
+              <span>•</span>
+              <span>Official Questions &amp; Solutions</span>
+            </div>
+          </div>
+          <div class="paper-action-buttons">
+            <a href="pdf/GAAC_2026_Quarter_Finals.pdf" download="GAAC_2026_Quarter_Finals.pdf" class="paper-btn paper-btn-primary">
+              <svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"></path><polyline points="7 10 12 15 17 10"></polyline><line x1="12" y1="15" x2="12" y2="3"></line></svg>
+              Download
+            </a>
+            <a href="pdf/GAAC_2026_Quarter_Finals.pdf" target="_blank" rel="noopener noreferrer" class="paper-btn paper-btn-secondary">
+              <svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M18 13v6a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2V8a2 2 0 0 1 2-2h6"></path><polyline points="15 3 21 3 21 9"></polyline><line x1="10" y1="14" x2="21" y2="3"></line></svg>
+              Preview
+            </a>
+          </div>
+        </div>
+
+        <!-- 05: Semi-Finals (Final 4) -->
+        <div class="exam-paper-box">
+          <div>
+            <div class="paper-stage-row">
+              <span class="paper-stage-badge">Semi-Finals</span>
+              <span class="paper-idx">#05</span>
+            </div>
+            <h3 class="paper-main-title">Semi-Finals (Final 4) Official Paper</h3>
+            <p class="paper-sub-desc">Intense semi-final problems exploring binary systems, gravitational wave astrophysics, and galactic structure.</p>
+            <div class="paper-doc-info">
+              <span><svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"></path></svg> PDF Document</span>
+              <span>•</span>
+              <span>Official Questions &amp; Solutions</span>
+            </div>
+          </div>
+          <div class="paper-action-buttons">
+            <a href="pdf/GAAC_2026_Semi_Finals.pdf" download="GAAC_2026_Semi_Finals.pdf" class="paper-btn paper-btn-primary">
+              <svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"></path><polyline points="7 10 12 15 17 10"></polyline><line x1="12" y1="15" x2="12" y2="3"></line></svg>
+              Download
+            </a>
+            <a href="pdf/GAAC_2026_Semi_Finals.pdf" target="_blank" rel="noopener noreferrer" class="paper-btn paper-btn-secondary">
+              <svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M18 13v6a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2V8a2 2 0 0 1 2-2h6"></path><polyline points="15 3 21 3 21 9"></polyline><line x1="10" y1="14" x2="21" y2="3"></line></svg>
+              Preview
+            </a>
+          </div>
+        </div>
+
+        <!-- 06: Grand Finals -->
+        <div class="exam-paper-box">
+          <div>
+            <div class="paper-stage-row">
+              <span class="paper-stage-badge">Grand Finals</span>
+              <span class="paper-idx">#06</span>
+            </div>
+            <h3 class="paper-main-title">Grand Finals Championship Paper</h3>
+            <p class="paper-sub-desc">The ultimate championship paper featuring deep relativistic physics, cosmology, and high-energy astrophysical phenomena.</p>
+            <div class="paper-doc-info">
+              <span><svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"></path></svg> PDF Document</span>
+              <span>•</span>
+              <span>Official Questions &amp; Solutions</span>
+            </div>
+          </div>
+          <div class="paper-action-buttons">
+            <a href="pdf/GAAC_2026_Grand_Finals.pdf" download="GAAC_2026_Grand_Finals.pdf" class="paper-btn paper-btn-primary">
+              <svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"></path><polyline points="7 10 12 15 17 10"></polyline><line x1="12" y1="15" x2="12" y2="3"></line></svg>
+              Download
+            </a>
+            <a href="pdf/GAAC_2026_Grand_Finals.pdf" target="_blank" rel="noopener noreferrer" class="paper-btn paper-btn-secondary">
+              <svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M18 13v6a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2V8a2 2 0 0 1 2-2h6"></path><polyline points="15 3 21 3 21 9"></polyline><line x1="10" y1="14" x2="21" y2="3"></line></svg>
+              Preview
+            </a>
+          </div>
+        </div>
+      </div>
+    </section>
+
+  </main>
+
+  <footer class="site-footer">
+    <div>
+      <img src="images/GAAC_Final_logo_without_BG-removebg-preview.png" alt="GAAC logo" />
+      <p>Global Astronomy &amp; Astrophysics Challenge, organized by STEM October Astronomy Club.</p>
+      <a class="footer-email" href="mailto:gaac@stemastronomyclub.org">gaac@stemastronomyclub.org</a>
+      <p class="copyright">Copyright 2026 Global Astronomy &amp; Astrophysics Challenge.</p>
+    </div>
+  </footer>
+
+  <script src="script.js"></script>
+  <script src="rankings_data.js"></script>
+  <script type="module">
+    import { initializeApp } from "https://www.gstatic.com/firebasejs/10.12.2/firebase-app.js";
+    import { getFirestore, collection, getDocs, query, orderBy } from "https://www.gstatic.com/firebasejs/10.12.2/firebase-firestore.js";
+
+    const firebaseConfig = {
+      apiKey: "AIzaSyDsYFFtEJ96yg0Rqw7EfCZFoiLIaeDk6zY",
+      authDomain: "gaac-registration-2026.firebaseapp.com",
+      projectId: "gaac-registration-2026",
+      storageBucket: "gaac-registration-2026.firebasestorage.app",
+      messagingSenderId: "542838311094",
+      appId: "1:542838311094:web:6104e2ed0d1cafa976be17",
+      measurementId: "G-CEB6Z0RF5E"
+    };
+    const app = initializeApp(firebaseConfig);
+    const db = getFirestore(app);
+
+    const countryCodeMap = {
+      "romania": "ro", "egypt": "eg", "morocco": "ma", "morroco": "ma",
+      "ethiopia": "et", "ukraine": "ua", "india": "in", "united kingdom": "gb",
+      "peru": "pe", "perú": "pe", "pakistan": "pk", "indonesia": "id",
+      "syria": "sy", "kyrgyzstan": "kg", "tunisia": "tn", "ghana": "gh",
+      "afghanistan": "af", "canada": "ca", "sudan": "sd", "algeria": "dz",
+      "philippines": "ph", "turkey": "tr", "saudi arabia": "sa", "uae": "ae",
+      "germany": "de", "france": "fr", "united states": "us", "italy": "it", "spain": "es"
+    };
+
+    function getFlagImg(cName) {
+      if (!cName) return '';
+      const k = cName.trim().toLowerCase();
+      const code = countryCodeMap[k] || 'un';
+      return `<img class="flag-img" src="https://flagcdn.com/24x18/${code}.png" alt="${cName}" loading="lazy" />`;
+    }
+
+    function cleanName(n) {
+      if (!n) return '';
+      let str = String(n).trim();
+      if (/^full name\s*:?/i.test(str)) str = str.replace(/full name\s*:?\s*/i, '').trim();
+      return str;
+    }
+
+    function esc(s) {
+      return String(s == null ? '' : s)
+        .replace(/&/g, '&amp;').replace(/</g, '&lt;').replace(/>/g, '&gt;')
+        .replace(/"/g, '&quot;').replace(/'/g, '&#39;');
+    }
+
+    function roleLabel(role, idx) {
+      const r = String(role || '').trim().toLowerCase();
+      if (!r) return idx === 0 ? 'Team Leader' : 'Team Member';
+      if (r.includes('leader') || r.includes('captain')) return 'Team Leader';
+      if (r.includes('member2')) return 'Member 2';
+      if (r.includes('member3')) return 'Member 3';
+      return role;
+    }
+
+    function awardForRank(r) {
+      if (r === 1) return 'Global Champion';
+      if (r === 2) return '1st Runner-Up';
+      if (r === 3) return '2nd Runner-Up';
+      if (r === 4) return 'Grand Finalist';
+      if (r <= 8) return 'Distinguished Finalist';
+      if (r <= 17) return 'Finalist';
+      if (r <= 32) return 'High Honors';
+      return 'Honors';
+    }
+
+    let teamList = [];
+
+    function renderPodium() {
+      const wrap = document.getElementById('podiumWrap');
+      if (!wrap) return;
+      const cards = [
+        { rank: 2, cls: 'silver', step: 'step-2', label: '2nd Place' },
+        { rank: 1, cls: 'gold', step: 'step-1', label: 'Champion' },
+        { rank: 3, cls: 'bronze', step: 'step-3', label: '3rd Place' }
+      ];
+      const teamByRank = new Map(teamList.filter(t => t.rank <= 3).map(t => [t.rank, t]));
+      let html = '';
+      cards.forEach(c => {
+        const t = teamByRank.get(c.rank);
+        if (!t) {
+          html += `<div class="podium-col rank-${c.rank}-col"><div class="podium-card ${c.cls}"><h3>—</h3></div><div class="pedestal-step ${c.step}"><span>${c.rank}</span><span class="pedestal-label">${c.label}</span></div></div>`;
+          return;
+        }
+        const memberNames = t.members.length
+          ? t.members.map(m => esc(cleanName(m.name))).join('<br />')
+          : 'No participants';
+        html += `
+          <div class="podium-col rank-${c.rank}-col">
+            <div class="podium-card ${c.cls}">
+              <div class="podium-rank-badge">${c.rank}</div>
+              <h3>${esc(t.teamName)}</h3>
+              <span class="podium-award">${esc(t.award)}</span>
+              <div class="podium-country">${getFlagImg(t.country)} <span>${esc(t.country)}</span></div>
+              <div class="podium-members">${memberNames}</div>
+            </div>
+            <div class="pedestal-step ${c.step}">
+              <span>${c.rank}</span>
+              <span class="pedestal-label">${c.label}</span>
+            </div>
+          </div>`;
+      });
+      wrap.innerHTML = html;
+    }
+
+    function renderLeaderboard() {
+      const tbody = document.getElementById('leadBody');
+      if (!tbody) return;
+      tbody.innerHTML = '';
+      const skeleton = document.getElementById('lbTableSkeleton');
+      if (skeleton) skeleton.closest('tr')?.remove();
+
+      const query = searchQuery.toLowerCase().trim();
+
+      const filtered = teamList.filter(t => {
+        if (!query) return true;
+        const matchName = (t.teamName || '').toLowerCase().includes(query);
+        const matchCountry = (t.country || '').toLowerCase().includes(query);
+        const matchSchool = (t.school || '').toLowerCase().includes(query);
+        const matchMembers = (t.members || []).some(m => cleanName(m.name).toLowerCase().includes(query));
+        return matchName || matchCountry || matchSchool || matchMembers;
+      });
+
+      const countEl = document.getElementById('standingsCount');
+      if (countEl) {
+        countEl.textContent = `Showing ${filtered.length} of ${teamList.length} honored teams · Click any team to view official roster & school`;
+      }
+
+      if (filtered.length === 0) {
+        const tr = document.createElement('tr');
+        tr.innerHTML = `<td colspan="5" style="padding:30px 16px; text-align:center; color:var(--muted);">No teams match your search.</td>`;
+        tbody.appendChild(tr);
+        return;
+      }
+
+      filtered.forEach(team => {
+        const trMain = document.createElement('tr');
+        trMain.className = 'team-row';
+
+        let rankClass = '';
+        let tagClass = 'tag-blue';
+
+        if (team.rank === 1) { rankClass = 'r-1'; tagClass = 'tag-gold'; }
+        else if (team.rank === 2) { rankClass = 'r-2'; tagClass = 'tag-silver'; }
+        else if (team.rank === 3) { rankClass = 'r-3'; tagClass = 'tag-bronze'; }
+
+        trMain.innerHTML = `
+          <td><span class="rank-num ${rankClass}">#${team.rank}</span></td>
+          <td><span class="team-name-cell">${esc(team.teamName)}</span></td>
+          <td><span class="country-cell">${getFlagImg(team.country)} <span>${esc(team.country)}</span></span></td>
+          <td><span class="award-tag ${tagClass}">${esc(team.award)}</span></td>
+          <td style="text-align:center;"><span class="expand-arrow">&#9662;</span></td>
+        `;
+
+        const trAcc = document.createElement('tr');
+        trAcc.className = 'accordion-row';
+
+        let membersHtml = '';
+        (team.members || []).forEach((m, idx) => {
+          const mName = cleanName(m.name);
+          const mRole = roleLabel(m.role, idx);
+          const mSchool = m.school || team.school || 'Academic Institution';
+          const mCountry = m.country || team.country || 'Global';
+
+          membersHtml += `
+            <div class="acc-card">
+              <div class="acc-card-top">
+                <span class="acc-name">${esc(mName)}</span>
+                <span class="acc-role">${esc(mRole)}</span>
+              </div>
+              <div class="acc-meta">
+                <span class="acc-school"><span>${esc(mSchool)}</span></span>
+                <span>${getFlagImg(mCountry)} ${esc(mCountry)}</span>
+              </div>
+            </div>
+          `;
+        });
+
+        trAcc.innerHTML = `
+          <td colspan="5" style="padding:0;">
+            <div class="accordion-box">
+              <div style="font-size:0.75rem; font-family:var(--font-orbitron); color:var(--muted); letter-spacing:0.08em; text-transform:uppercase; margin-bottom:8px;">
+                Honored Participant${(team.members || []).length > 1 ? 's' : ''} · ${esc(team.teamName)}
+              </div>
+              <div class="acc-grid">
+                ${membersHtml}
+              </div>
+            </div>
+          </td>
+        `;
+
+        trMain.addEventListener('click', () => {
+          const isOpen = trAcc.classList.contains('open');
+          document.querySelectorAll('.accordion-row.open').forEach(r => r.classList.remove('open'));
+          document.querySelectorAll('.team-row.expanded').forEach(r => r.classList.remove('expanded'));
+
+          if (!isOpen) {
+            trAcc.classList.add('open');
+            trMain.classList.add('expanded');
+          }
+        });
+
+        tbody.appendChild(trMain);
+        tbody.appendChild(trAcc);
+      });
+    }
+
+    let searchQuery = '';
+    const searchBox = document.getElementById('searchBox');
+    if (searchBox) {
+      searchBox.addEventListener('input', (e) => {
+        searchQuery = e.target.value;
+        renderLeaderboard();
+      });
+    }
+
+    async function loadData() {
+      const podiumLoading = document.getElementById('podiumLoading');
+      try {
+        // Read directly from verified local embedded dataset first (0 Firestore Reads)
+        let rawDocs = window.GAAC_RANKINGS;
+
+        // Fallback to Firestore if local script wasn't loaded
+        if (!rawDocs || !rawDocs.length) {
+          const q = query(collection(db, 'rankings'), orderBy('sortRank'));
+          const snap = await getDocs(q);
+          rawDocs = snap.docs.map(d => ({ ...d.data(), id: d.id }));
+        }
+
+        teamList = [];
+        rawDocs.forEach(t => {
+          const r = Number(t.rank);
+          if (!(r >= 1 && r <= 77)) return;
+          if (t.isDQTeam === true) return;
+
+          let award = t.award || awardForRank(r);
+          const members = (t.members || [])
+            .filter(m => m.isDQ !== true)
+            .map(m => ({
+              name: m.name,
+              email: m.email,
+              role: m.role,
+              school: m.school,
+              country: m.country
+            }));
+
+          if (members.length === 0) return;
+
+          teamList.push({
+            tid: t.id || t.tid || '',
+            rank: r,
+            teamName: t.teamName || 'GAAC Team',
+            country: t.country || 'Global',
+            school: t.school || 'Academic Institution',
+            award,
+            members
+          });
+        });
+
+        teamList.sort((a, b) => a.rank - b.rank);
+
+        if (podiumLoading) podiumLoading.style.display = 'none';
+        renderPodium();
+        renderLeaderboard();
+      } catch (err) {
+        console.error('Leaderboard load failed:', err);
+        if (podiumLoading) podiumLoading.style.display = 'none';
+        const countEl = document.getElementById('standingsCount');
+        if (countEl) {
+          countEl.innerHTML = '<span class="lb-status-note"><svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="#ff5f6d" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="10"/><line x1="12" y1="8" x2="12" y2="12"/><line x1="12" y1="16" x2="12.01" y2="16"/></svg> Standings temporarily unavailable. Please try again in a moment.</span>';
+        }
+      }
+    }
+
+    // --- TAB SWITCHER LOGIC ---
+    const btnStandings = document.getElementById('tab-btn-standings');
+    const btnPapers = document.getElementById('tab-btn-papers');
+    const viewStandings = document.getElementById('view-standings');
+    const viewPapers = document.getElementById('view-papers');
+    const navStandingsLink = document.getElementById('nav-standings-link');
+    const navPapersLink = document.getElementById('nav-papers-link');
+    const heroMainTitle = document.getElementById('hero-main-title');
+    const heroSubtext = document.getElementById('hero-subtext');
+
+    function setActiveTab(tab) {
+      if (tab === 'papers') {
+        if (btnStandings) btnStandings.classList.remove('active');
+        if (btnPapers) btnPapers.classList.add('active');
+        if (viewStandings) viewStandings.classList.add('hidden');
+        if (viewPapers) viewPapers.classList.remove('hidden');
+        if (heroMainTitle) heroMainTitle.textContent = 'Examination Papers & Solutions';
+        if (heroSubtext) heroSubtext.textContent = 'Official GAAC 2026 problem sets and complete academic solutions from Mock to Grand Finals.';
+        window.history.replaceState(null, '', '#papers');
+      } else {
+        if (btnPapers) btnPapers.classList.remove('active');
+        if (btnStandings) btnStandings.classList.add('active');
+        if (viewPapers) viewPapers.classList.add('hidden');
+        if (viewStandings) viewStandings.classList.remove('hidden');
+        if (heroMainTitle) heroMainTitle.textContent = 'Official Competition Standings';
+        if (heroSubtext) heroSubtext.textContent = 'Official rankings and distinctions for the top 77 teams and honors in GAAC 2026.';
+        window.history.replaceState(null, '', window.location.pathname);
+      }
+    }
+
+    if (btnStandings && btnPapers) {
+      btnStandings.addEventListener('click', () => setActiveTab('standings'));
+      btnPapers.addEventListener('click', () => setActiveTab('papers'));
+    }
+
+    if (navPapersLink) {
+      navPapersLink.addEventListener('click', (e) => {
+        e.preventDefault();
+        setActiveTab('papers');
+        window.scrollTo({ top: 0, behavior: 'smooth' });
+      });
+    }
+
+    if (navStandingsLink) {
+      navStandingsLink.addEventListener('click', (e) => {
+        e.preventDefault();
+        setActiveTab('standings');
+        window.scrollTo({ top: 0, behavior: 'smooth' });
+      });
+    }
+
+    if (window.location.hash === '#papers' || window.location.hash === '#exam-papers') {
+      setActiveTab('papers');
+    }
+
+    // Run data loading immediately
+    loadData();
+
+    // Mobile navigation toggle handler
+    const navToggleBtn = document.querySelector('.nav-toggle');
+    const mainSiteNav = document.querySelector('.site-nav');
+    if (navToggleBtn && mainSiteNav) {
+      navToggleBtn.addEventListener('click', () => {
+        const isOpen = mainSiteNav.classList.toggle('open');
+        navToggleBtn.setAttribute('aria-expanded', String(isOpen));
+      });
+      mainSiteNav.querySelectorAll('a').forEach(link => {
+        link.addEventListener('click', () => {
+          mainSiteNav.classList.remove('open');
+          navToggleBtn.setAttribute('aria-expanded', 'false');
+        });
+      });
+    }
+
+
+  </script>
+</body>
+</html>

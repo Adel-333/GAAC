@@ -7,39 +7,101 @@
     <link rel="icon" href="images/GAAC Dark.jpg" type="image/jpeg" />
     <link href="https://fonts.googleapis.com/css2?family=Orbitron:wght@600;700;800;900&family=Inter:wght@400;500;600;700;800;900&display=swap" rel="stylesheet" />
     <link rel="stylesheet" href="styles.css" />
-    <style>
-      .stats-row {
-        display: flex;
+<style>
+      .hidden { display: none !important; }
+      .loading-wrap { text-align: center; padding: 70px 20px; }
+      .loader {
+        width: 46px;
+        height: 46px;
+        margin: 0 auto 18px;
+        border: 4px solid rgba(38, 183, 255, 0.2);
+        border-top-color: var(--blue);
+        border-radius: 50%;
+        animation: dash-loader 0.9s linear infinite;
+      }
+      @keyframes dash-loader { to { transform: rotate(360deg); } }
+      .loading-wrap p { color: var(--muted); margin: 0; font-size: 0.9rem; }
+.stats-row {
+        display: grid;
+        grid-template-columns: repeat(auto-fit, minmax(170px, 1fr));
         gap: 16px;
-        justify-content: center;
         margin: 32px 0;
-        flex-wrap: wrap;
+        max-width: 900px;
+        margin-left: auto;
+        margin-right: auto;
       }
       .stat-mini {
-        background: rgba(10, 14, 23, 0.6);
+        background: linear-gradient(160deg, rgba(20, 32, 58, 0.85), rgba(10, 14, 23, 0.7));
         border: 1px solid rgba(255, 255, 255, 0.1);
-        border-radius: 12px;
-        padding: 16px 28px;
+        border-radius: 14px;
+        padding: 22px 20px;
         text-align: center;
         backdrop-filter: blur(12px);
-        min-width: 140px;
+        position: relative;
+        overflow: hidden;
+        transition: transform 0.2s ease, border-color 0.2s ease;
       }
+      .stat-mini::before {
+        content: '';
+        position: absolute;
+        top: 0;
+        left: 0;
+        right: 0;
+        height: 3px;
+        background: linear-gradient(90deg, transparent, var(--blue-light), transparent);
+        opacity: 0.6;
+      }
+      .stat-mini:hover { transform: translateY(-3px); border-color: rgba(38, 183, 255, 0.4); }
       .stat-mini h3 {
-        font-family: var(--font-inter);
-        font-size: 0.8rem;
+        font-family: var(--font-orbitron);
+        font-size: 0.76rem;
         color: var(--silver);
-        font-weight: 500;
-        margin-bottom: 6px;
+        font-weight: 600;
+        margin-bottom: 10px;
         text-transform: uppercase;
-        letter-spacing: 0.05em;
+        letter-spacing: 0.08em;
       }
       .stat-mini .val {
-        font-size: 1.8rem;
+        font-size: 2rem;
         font-family: var(--font-orbitron);
-        color: var(--white);
+        background: linear-gradient(120deg, #ffffff, var(--blue-light));
+        -webkit-background-clip: text;
+        background-clip: text;
+        -webkit-text-fill-color: transparent;
+        color: var(--blue-light);
         margin: 0;
+        line-height: 1.1;
       }
-      .referral-box {
+      .stat-mini .stat-cap {
+        display: block;
+        margin-top: 8px;
+        font-size: 0.7rem;
+        color: var(--muted);
+        letter-spacing: 0.04em;
+        line-height: 1.4;
+      }
+      .dashboard-head {
+        display: flex;
+        align-items: center;
+        justify-content: space-between;
+        gap: 16px;
+        flex-wrap: wrap;
+      }
+      .rank-pill {
+        display: inline-flex;
+        align-items: center;
+        gap: 8px;
+        font-family: var(--font-orbitron);
+        font-size: 0.8rem;
+        font-weight: 700;
+        letter-spacing: 0.08em;
+        color: var(--blue-light);
+        border: 1px solid rgba(38, 183, 255, 0.35);
+        background: rgba(38, 183, 255, 0.10);
+        border-radius: 999px;
+        padding: 8px 18px;
+      }
+.referral-box {
         background: rgba(38, 183, 255, 0.1);
         border: 1px dashed var(--blue);
         border-radius: 12px;
@@ -66,21 +128,275 @@
         padding: 10px 16px;
         border-radius: 8px;
       }
-      .leaderboard-prompt {
-        text-align: center;
-        margin-top: 40px;
-        padding: 24px;
-        background: rgba(255, 255, 255, 0.03);
-        border-radius: 12px;
+.cert-card {
+        background: linear-gradient(135deg, rgba(38, 183, 255, 0.10), rgba(10, 14, 23, 0.6));
+        border: 1px solid rgba(38, 183, 255, 0.35);
+        border-radius: 16px;
+        padding: 28px 26px;
+        margin: 32px auto;
         max-width: 640px;
-        margin-left: auto;
-        margin-right: auto;
+        text-align: center;
+        box-shadow: 0 0 30px rgba(38, 183, 255, 0.10);
       }
-      .leaderboard-prompt p {
-        color: var(--muted);
-        font-size: 0.95rem;
+      .cert-card .cert-rank-badge {
+        display: inline-flex;
+        align-items: center;
+        gap: 8px;
+        font-family: var(--font-orbitron);
+        font-size: 0.78rem;
+        font-weight: 700;
+        letter-spacing: 0.08em;
+        text-transform: uppercase;
+        color: var(--blue-light);
+        border: 1px solid rgba(38, 183, 255, 0.4);
+        background: rgba(38, 183, 255, 0.10);
+        border-radius: 999px;
+        padding: 6px 16px;
+        margin-bottom: 14px;
+      }
+      .cert-card h3 {
+        font-family: var(--font-orbitron);
+        font-size: 1rem;
+        color: var(--white);
+        letter-spacing: 0.04em;
+        margin-bottom: 10px;
+      }
+      .cert-card p {
+        color: var(--silver);
+        font-size: 0.9rem;
         line-height: 1.6;
       }
+      .cert-stats {
+        display: flex;
+        gap: 12px;
+        justify-content: center;
+        flex-wrap: wrap;
+        margin: 18px 0;
+      }
+      .cert-stat {
+        background: rgba(10, 14, 23, 0.65);
+        border: 1px solid rgba(255, 255, 255, 0.1);
+        border-radius: 10px;
+        padding: 10px 18px;
+        min-width: 110px;
+      }
+      .cert-stat .v {
+        font-family: var(--font-orbitron);
+        font-size: 1.15rem;
+        font-weight: 800;
+        color: var(--white);
+      }
+      .cert-stat .k {
+        font-size: 0.7rem;
+        color: var(--muted);
+        text-transform: uppercase;
+        letter-spacing: 0.05em;
+        margin-top: 2px;
+      }
+    
+      /* Ambassador Prizes Section */
+      .prizes-card {
+        background: linear-gradient(135deg, rgba(20, 32, 58, 0.85), rgba(10, 14, 23, 0.9));
+        border: 1px solid rgba(38, 183, 255, 0.35);
+        border-radius: 16px;
+        padding: 28px 24px;
+        margin: 32px auto;
+        max-width: 780px;
+        box-shadow: 0 0 35px rgba(38, 183, 255, 0.08);
+        position: relative;
+        overflow: hidden;
+      }
+      .prizes-card::before {
+        content: '';
+        position: absolute;
+        top: 0;
+        left: 0;
+        right: 0;
+        height: 3px;
+        background: linear-gradient(90deg, transparent, var(--blue-light), transparent);
+        opacity: 0.8;
+      }
+      .prizes-header {
+        text-align: center;
+        margin-bottom: 24px;
+      }
+      .prize-tier-badge {
+        display: inline-flex;
+        align-items: center;
+        gap: 8px;
+        font-family: var(--font-orbitron);
+        font-size: 0.78rem;
+        font-weight: 700;
+        letter-spacing: 0.08em;
+        text-transform: uppercase;
+        border-radius: 999px;
+        padding: 6px 18px;
+        margin-bottom: 12px;
+      }
+      .prize-tier-badge.gold {
+        color: #ffd700;
+        border: 1px solid rgba(255, 215, 0, 0.45);
+        background: rgba(255, 215, 0, 0.12);
+        box-shadow: 0 0 15px rgba(255, 215, 0, 0.15);
+      }
+      .prize-tier-badge.silver {
+        color: #e0e0e0;
+        border: 1px solid rgba(224, 224, 224, 0.45);
+        background: rgba(224, 224, 224, 0.12);
+      }
+      .prize-tier-badge.bronze {
+        color: #cd7f32;
+        border: 1px solid rgba(205, 127, 50, 0.45);
+        background: rgba(205, 127, 50, 0.12);
+      }
+      .prize-tier-badge.milestone {
+        color: var(--blue-light);
+        border: 1px solid rgba(38, 183, 255, 0.45);
+        background: rgba(38, 183, 255, 0.12);
+      }
+      .prizes-header h3 {
+        font-family: var(--font-orbitron);
+        font-size: 1.15rem;
+        color: var(--white);
+        margin-bottom: 6px;
+      }
+      .prizes-header p {
+        color: var(--silver);
+        font-size: 0.88rem;
+        max-width: 580px;
+        margin: 0 auto;
+        line-height: 1.5;
+      }
+      .prize-items-grid {
+        display: grid;
+        grid-template-columns: repeat(auto-fit, minmax(320px, 1fr));
+        gap: 16px;
+      }
+      .prize-box {
+        background: rgba(13, 20, 36, 0.92);
+        border: 1px solid rgba(255, 255, 255, 0.08);
+        border-radius: 12px;
+        padding: 20px;
+        display: flex;
+        flex-direction: column;
+        justify-content: space-between;
+        transition: transform 0.2s ease, border-color 0.2s ease;
+      }
+      .prize-box:hover {
+        border-color: rgba(38, 183, 255, 0.35);
+        transform: translateY(-2px);
+      }
+      .prize-box-top {
+        display: flex;
+        align-items: flex-start;
+        justify-content: space-between;
+        gap: 12px;
+        margin-bottom: 12px;
+      }
+      .prize-box-title {
+        font-family: var(--font-orbitron);
+        font-size: 0.95rem;
+        font-weight: 700;
+        color: var(--white);
+        margin: 0;
+      }
+      .prize-box-sub {
+        font-size: 0.78rem;
+        color: var(--muted);
+        margin-top: 2px;
+      }
+      .prize-box-tag {
+        font-family: var(--font-orbitron);
+        font-size: 0.68rem;
+        font-weight: 600;
+        padding: 3px 10px;
+        border-radius: 999px;
+        background: rgba(38, 183, 255, 0.1);
+        color: var(--blue-light);
+        border: 1px solid rgba(38, 183, 255, 0.25);
+        white-space: nowrap;
+      }
+      .prize-code-wrap {
+        background: rgba(0, 0, 0, 0.45);
+        border: 1px dashed rgba(38, 183, 255, 0.35);
+        border-radius: 8px;
+        padding: 10px 14px;
+        margin: 10px 0;
+        display: flex;
+        align-items: center;
+        justify-content: space-between;
+        gap: 10px;
+      }
+      .prize-code-label {
+        font-size: 0.7rem;
+        color: var(--muted);
+        text-transform: uppercase;
+        letter-spacing: 0.05em;
+        margin-bottom: 2px;
+      }
+      .prize-code-text {
+        font-family: monospace;
+        font-size: 0.95rem;
+        font-weight: 700;
+        color: var(--blue-light);
+        word-break: break-all;
+      }
+      .prize-btn-copy {
+        background: rgba(38, 183, 255, 0.15);
+        border: 1px solid rgba(38, 183, 255, 0.35);
+        color: var(--white);
+        font-size: 0.75rem;
+        font-family: var(--font-orbitron);
+        padding: 6px 12px;
+        border-radius: 6px;
+        cursor: pointer;
+        transition: all 0.2s ease;
+        white-space: nowrap;
+        flex-shrink: 0;
+      }
+      .prize-btn-copy:hover {
+        background: var(--blue);
+        color: #000;
+      }
+      .prize-steps {
+        margin: 10px 0 14px;
+        padding-left: 18px;
+        font-size: 0.8rem;
+        color: var(--silver);
+        line-height: 1.5;
+      }
+      .prize-steps li {
+        margin-bottom: 4px;
+      }
+      .prize-steps li:last-child {
+        margin-bottom: 0;
+      }
+      .prize-action-btn {
+        display: inline-flex;
+        align-items: center;
+        justify-content: center;
+        gap: 8px;
+        width: 100%;
+        margin-top: 8px;
+        padding: 10px 16px;
+        font-family: var(--font-orbitron);
+        font-size: 0.8rem;
+        font-weight: 700;
+        letter-spacing: 0.05em;
+        text-decoration: none;
+        color: var(--white);
+        background: linear-gradient(135deg, rgba(38, 183, 255, 0.25), rgba(38, 183, 255, 0.1));
+        border: 1px solid rgba(38, 183, 255, 0.45);
+        border-radius: 8px;
+        transition: all 0.2s ease;
+        box-sizing: border-box;
+      }
+      .prize-action-btn:hover {
+        background: var(--blue);
+        color: #000;
+        border-color: var(--blue);
+      }
+
     </style>
   </head>
   <body class="page-ambassador">
@@ -105,19 +421,42 @@
     <main>
       <section class="page-shell">
         <div class="reveal">
-          <p class="eyebrow" id="user-greeting">Loading...</p>
-          <h1>Your <span class="text-blue">Dashboard</span>.</h1>
+          <div class="dashboard-head">
+            <div>
+              <p class="eyebrow" id="user-greeting">Loading...</p>
+              <h1>Your <span class="text-blue">Dashboard</span>.</h1>
+            </div>
+            <span class="rank-pill" id="head-rank" hidden>Official Rank #—</span>
+          </div>
+          <p style="color: var(--muted); margin-top: 8px;">Track your referrals, impact, and official standing.</p>
         </div>
 
-        <div id="loading-state" style="text-align: center; padding: 60px;">
+        <div id="loading-state" class="loading-wrap">
+          <div class="loader"></div>
           <p>Loading dashboard data...</p>
         </div>
 
         <div id="dashboard-content" class="hidden">
           <div class="stats-row">
             <div class="stat-mini">
-              <h3>Referrals</h3>
-              <p class="val text-blue" id="stat-referrals">0</p>
+              <h3>Students Registered</h3>
+              <p class="val text-blue" id="stat-students-reg">0</p>
+              <span class="stat-cap">Via your referral link</span>
+            </div>
+            <div class="stat-mini">
+              <h3>Teams Registered</h3>
+              <p class="val text-blue" id="stat-teams-reg">0</p>
+              <span class="stat-cap">Confirmed teams</span>
+            </div>
+            <div class="stat-mini">
+              <h3>Active Participants</h3>
+              <p class="val text-blue" id="stat-students-active">0</p>
+              <span class="stat-cap">Took the Round 1 exam</span>
+            </div>
+            <div class="stat-mini">
+              <h3>Active Teams</h3>
+              <p class="val text-blue" id="stat-teams-active">0</p>
+              <span class="stat-cap">Teams in the exam</span>
             </div>
           </div>
 
@@ -129,14 +468,29 @@
             <button id="btn-copy-link" class="button primary">Copy Link</button>
           </div>
 
-          <div class="leaderboard-prompt">
-            <p>Don't see yourself on the leaderboard?<br>
-            <strong style="color: var(--blue-light);">Share your referral link everywhere</strong>, social media, group chats, with friends — and climb into the <strong style="color: var(--white);">top 15</strong>!</p>
-            <p style="color: var(--muted); font-size: 0.8rem; margin-top: 8px;">1 accepted referral = points on the leaderboard. Earn 5+ for a certificate, 20+ for Wolfram|One.</p>
-            <a href="ambassador" class="button secondary" style="margin-top: 12px;">View Leaderboard &amp; Prizes</a>
+                    <div class="prizes-card" id="amb-prizes-card" hidden>
+            <div class="prizes-header">
+              <span class="prize-tier-badge" id="amb-prize-badge">Official Rewards</span>
+              <h3 id="amb-prize-title">Your Ambassador Prizes</h3>
+              <p id="amb-prize-desc">Here are your official software licenses, product keys, and redemption guides.</p>
+            </div>
+            <div class="prize-items-grid" id="amb-prizes-list"></div>
           </div>
 
-          <div id="admin-banner" hidden style="margin-top: 40px; padding: 16px; background: rgba(255, 71, 87, 0.1); border: 1px solid rgba(255, 71, 87, 0.4); border-radius: 8px; text-align: center;">
+          <div class="cert-card" id="amb-cert-card" hidden>
+            <span class="cert-rank-badge" id="amb-cert-rank">Official Rank #---</span>
+            <h3>GAAC 2026 Ambassador Certificate</h3>
+            <p>Your verified certificate is available below, based on the official GAAC 2026 ambassador leaderboard.</p>
+            <div class="cert-stats">
+              <div class="cert-stat"><div class="v" id="amb-cert-students-reg">0</div><div class="k">Students Reg</div></div>
+              <div class="cert-stat"><div class="v" id="amb-cert-teams-reg">0</div><div class="k">Teams Reg</div></div>
+              <div class="cert-stat"><div class="v" id="amb-cert-students-active">0</div><div class="k">Active Students</div></div>
+              <div class="cert-stat"><div class="v" id="amb-cert-teams-active">0</div><div class="k">Active Teams</div></div>
+            </div>
+            <a id="amb-cert-link" class="button primary" href="ambassador-certificate.html">Download Certificate</a>
+          </div>
+
+<div id="admin-banner" hidden style="margin-top: 40px; padding: 16px; background: rgba(255, 71, 87, 0.1); border: 1px solid rgba(255, 71, 87, 0.4); border-radius: 8px; text-align: center;">
             <p style="margin:0;">You have Admin privileges. <a href="admin-exam" style="color: #ff4757; text-decoration: underline; font-weight: bold;">Go to Admin Dashboard</a></p>
           </div>
         </div>
@@ -176,7 +530,8 @@
   
 </footer>
 
-    <script src="script.js"></script>
+<script src="script.js"></script>
+    <script src="ambassador_cert_data.js"></script>
     <script type="module">
       import { initializeApp } from "https://www.gstatic.com/firebasejs/10.12.2/firebase-app.js";
       import { getAuth, onAuthStateChanged, signOut } from "https://www.gstatic.com/firebasejs/10.12.2/firebase-auth.js";
@@ -199,11 +554,265 @@
       const loadingState = document.getElementById('loading-state');
       const dashContent = document.getElementById('dashboard-content');
       const userGreeting = document.getElementById('user-greeting');
-      const statReferrals = document.getElementById('stat-referrals');
+      const statStudentsReg = document.getElementById('stat-students-reg');
+      const statTeamsReg = document.getElementById('stat-teams-reg');
+      const statStudentsActive = document.getElementById('stat-students-active');
+      const statTeamsActive = document.getElementById('stat-teams-active');
+      const headRank = document.getElementById('head-rank');
       const refCodeDisplay = document.getElementById('display-ref-code');
       const referralLink = document.getElementById('referral-link');
       const btnCopy = document.getElementById('btn-copy-link');
       const btnLogout = document.getElementById('btn-logout');
+
+      const ordinal = (n) => {
+        const s = ['th', 'st', 'nd', 'rd'];
+        const v = n % 100;
+        return n + (s[(v - 20) % 10] || s[v] || s[0]);
+      };
+
+      
+      function renderAmbassadorPrizes(rank, totalStudents) {
+        const prizesCard = document.getElementById('amb-prizes-card');
+        const badgeEl = document.getElementById('amb-prize-badge');
+        const titleEl = document.getElementById('amb-prize-title');
+        const descEl = document.getElementById('amb-prize-desc');
+        const listEl = document.getElementById('amb-prizes-list');
+        if (!prizesCard || !listEl) return;
+
+        let badgeClass = 'milestone';
+        let badgeText = '';
+        let titleText = '';
+        let descText = '';
+        const prizes = [];
+
+        if (rank === 1) {
+          badgeClass = 'gold';
+          badgeText = '1st Place Champion · Gold Award';
+          titleText = 'Official 1st Place Ambassador Rewards';
+          descText = 'Congratulations on achieving 1st Place in the GAAC 2026 Ambassador Program. Below are your official software licenses, Steam game keys, and subscription credentials.';
+
+          prizes.push({
+            title: 'Wolfram|Alpha Pro Plus',
+            duration: '1-Year Full Subscription (12 Months)',
+            tag: 'Pro Plus License',
+            code: 'GAAC2026',
+            codeLabel: 'Program Code',
+            url: 'http://www.wolfram.com/sponsorshiporderform/',
+            urlLabel: 'Open Sponsorship Order Form',
+            instructions: [
+              'Click "Open Sponsorship Order Form" to access the official Wolfram redemption portal.',
+              'In the "Program Code" field, enter: GAAC2026',
+              'Fill in your name and email address to activate your full 1-year Wolfram|Alpha Pro Plus subscription.'
+            ]
+          });
+
+          prizes.push({
+            title: 'Wolfram|One Pro',
+            duration: '3-Month Cloud & Desktop Access',
+            tag: 'Cloud & Desktop',
+            url: 'https://account.wolfram.com/redeem/GAAC26',
+            urlLabel: 'Redeem Wolfram|One',
+            instructions: [
+              'Visit the Wolfram redemption link: account.wolfram.com/redeem/GAAC26',
+              'Sign in with your Wolfram ID (or create a free account).',
+              'Use Wolfram|One directly in your web browser or download the desktop application.'
+            ]
+          });
+
+          prizes.push({
+            title: 'Universe Sandbox',
+            duration: 'Full Steam Game License',
+            tag: 'Steam Key',
+            code: '66RYI-GKYNV-Y8YGB',
+            codeLabel: 'Steam Product Key',
+            url: 'https://store.steampowered.com/about/',
+            urlLabel: 'Get Steam Client',
+            instructions: [
+              'Open the Steam client on your computer (or install from steampowered.com).',
+              'Navigate to the top menu bar: Games > Activate a Product on Steam...',
+              'Paste key: 66RYI-GKYNV-Y8YGB and finish setup to add Universe Sandbox to your library.'
+            ]
+          });
+
+          prizes.push({
+            title: 'Starry Night Pro Plus 8',
+            duration: 'Pro Plus Full Edition',
+            tag: 'Astronomy Software',
+            code: '0y45fm',
+            codeLabel: 'Activation Code',
+            url: 'https://starrynight.com/pro',
+            urlLabel: 'Download Starry Night',
+            instructions: [
+              'Download Starry Night Pro Plus 8 from starrynight.com/pro.',
+              'Install and enter activation code: 0y45fm when prompted to unlock the full edition.'
+            ]
+          });
+        } else if (rank === 2) {
+          badgeClass = 'silver';
+          badgeText = '2nd Place · Silver Award';
+          titleText = 'Official 2nd Place Ambassador Rewards';
+          descText = 'Congratulations on achieving 2nd Place in the GAAC 2026 Ambassador Program. Below are your official software licenses, Steam game keys, and mobile apps.';
+
+          prizes.push({
+            title: 'Wolfram|One Pro',
+            duration: '3-Month Cloud & Desktop Access',
+            tag: 'Cloud & Desktop',
+            url: 'https://account.wolfram.com/redeem/GAAC26',
+            urlLabel: 'Redeem Wolfram|One',
+            instructions: [
+              'Visit account.wolfram.com/redeem/GAAC26',
+              'Sign in with your Wolfram ID (or create one for free).',
+              'Activate your 3-month access on web and desktop.'
+            ]
+          });
+
+          prizes.push({
+            title: 'Kerbal Space Program',
+            duration: 'Full Steam Game License',
+            tag: 'Steam Key',
+            code: 'YCG8V-Q04K2-WMEJ9',
+            codeLabel: 'Steam Product Key',
+            url: 'https://store.steampowered.com/about/',
+            urlLabel: 'Get Steam Client',
+            instructions: [
+              'Open the Steam client on your computer.',
+              'Go to the top menu: Games > Activate a Product on Steam...',
+              'Paste key: YCG8V-Q04K2-WMEJ9 to claim Kerbal Space Program.'
+            ]
+          });
+
+          prizes.push({
+            title: 'SkySafari 8 Pro',
+            duration: 'Android Edition',
+            tag: 'Google Play Store',
+            code: '0JE2G5KJLNB6ZTP0HDG03G5',
+            codeLabel: 'Play Store Promo Code',
+            url: 'https://play.google.com/store',
+            urlLabel: 'Open Google Play',
+            instructions: [
+              'Open the Google Play Store app on your Android device.',
+              'Tap your profile icon > Payments & subscriptions > Redeem code.',
+              'Paste code: 0JE2G5KJLNB6ZTP0HDG03G5 to download SkySafari 8 Pro.'
+            ]
+          });
+        } else if (rank === 3) {
+          badgeClass = 'bronze';
+          badgeText = '3rd Place · Bronze Award';
+          titleText = 'Official 3rd Place Ambassador Rewards';
+          descText = 'Congratulations on achieving 3rd Place in the GAAC 2026 Ambassador Program. Below are your official software and Steam game credentials.';
+
+          prizes.push({
+            title: 'Wolfram|One Pro',
+            duration: '3-Month Cloud & Desktop Access',
+            tag: 'Cloud & Desktop',
+            url: 'https://account.wolfram.com/redeem/GAAC26',
+            urlLabel: 'Redeem Wolfram|One',
+            instructions: [
+              'Visit account.wolfram.com/redeem/GAAC26',
+              'Sign in with your Wolfram ID (or create one for free).',
+              'Activate your complimentary 3-month access to Wolfram|One Pro.'
+            ]
+          });
+
+          prizes.push({
+            title: 'Kerbal Space Program',
+            duration: 'Full Steam Game License',
+            tag: 'Steam Key',
+            code: 'YF209-5RW9M-RIRJZ',
+            codeLabel: 'Steam Product Key',
+            url: 'https://store.steampowered.com/about/',
+            urlLabel: 'Get Steam Client',
+            instructions: [
+              'Open the Steam client on your computer.',
+              'Go to the top menu: Games > Activate a Product on Steam...',
+              'Paste key: YF209-5RW9M-RIRJZ to claim Kerbal Space Program.'
+            ]
+          });
+        } else if (totalStudents >= 20) {
+          badgeClass = 'milestone';
+          badgeText = 'Referral Milestone · 20+ Registrations';
+          titleText = 'Ambassador Referral Milestone Reward';
+          descText = `Outstanding achievement! You brought in ${totalStudents} student registrations, unlocking the 20+ Referral Milestone Reward.`;
+
+          prizes.push({
+            title: 'Wolfram|One Pro',
+            duration: '3-Month Cloud & Desktop Access',
+            tag: 'Milestone Reward',
+            url: 'https://account.wolfram.com/redeem/GAAC26',
+            urlLabel: 'Redeem Wolfram|One',
+            instructions: [
+              'Visit the Wolfram redemption portal at account.wolfram.com/redeem/GAAC26',
+              'Sign in with your Wolfram ID (or create a free account).',
+              'Enjoy 3 full months of Wolfram|One Pro on both cloud and desktop.'
+            ]
+          });
+        }
+
+        if (prizes.length === 0) {
+          prizesCard.hidden = true;
+          return;
+        }
+
+        badgeEl.className = 'prize-tier-badge ' + badgeClass;
+        badgeEl.textContent = badgeText;
+        titleEl.textContent = titleText;
+        descEl.textContent = descText;
+
+        listEl.innerHTML = prizes.map(p => {
+          const codeBlock = p.code ? `
+            <div class="prize-code-wrap">
+              <div>
+                <div class="prize-code-label">${p.codeLabel || 'Code / Key'}</div>
+                <div class="prize-code-text">${p.code}</div>
+              </div>
+              <button type="button" class="prize-btn-copy" data-copy="${p.code}">Copy</button>
+            </div>` : '';
+
+          const stepsList = p.instructions && p.instructions.length ? `
+            <ol class="prize-steps">
+              ${p.instructions.map(step => `<li>${step}</li>`).join('')}
+            </ol>` : '';
+
+          const actionBtn = p.url ? `
+            <a class="prize-action-btn" href="${p.url}" target="_blank" rel="noopener noreferrer">${p.urlLabel || 'Redeem Now'}</a>` : '';
+
+          return `
+            <div class="prize-box">
+              <div>
+                <div class="prize-box-top">
+                  <div>
+                    <h4 class="prize-box-title">${p.title}</h4>
+                    <div class="prize-box-sub">${p.duration}</div>
+                  </div>
+                  <span class="prize-box-tag">${p.tag}</span>
+                </div>
+                ${codeBlock}
+                ${stepsList}
+              </div>
+              ${actionBtn}
+            </div>
+          `;
+        }).join('');
+
+        listEl.querySelectorAll('.prize-btn-copy').forEach(btn => {
+          btn.addEventListener('click', () => {
+            const val = btn.getAttribute('data-copy');
+            if (!val) return;
+            navigator.clipboard.writeText(val);
+            const orig = btn.textContent;
+            btn.textContent = 'Copied!';
+            btn.style.background = 'var(--blue)';
+            btn.style.color = '#000';
+            setTimeout(() => {
+              btn.textContent = orig;
+              btn.style.background = '';
+              btn.style.color = '';
+            }, 2000);
+          });
+        });
+
+        prizesCard.hidden = false;
+      }
 
       onAuthStateChanged(auth, async (user) => {
         if (!user) {
@@ -219,12 +828,30 @@
           }
 
           const data = docSnap.data();
-          const referrals = Math.floor((data.points || 0) / 10);
           userGreeting.textContent = `Welcome, ${data.fullName || 'Ambassador'}`;
           if (data.school) {
             userGreeting.innerHTML += `<br><span style="font-size: 0.7em; font-weight: 400; color: var(--muted);">${data.school}</span>`;
           }
-          statReferrals.textContent = referrals;
+
+          // Match this ambassador against the official verified leaderboard (embedded data).
+          const email = (data.email || user.email || '').trim().toLowerCase();
+          const lb = window.GAAC_AMBASSADOR_LEADERBOARD || [];
+          const record = lb.find(a => (a.email || '').toLowerCase() === email);
+
+          if (record) {
+            statStudentsReg.textContent = record.totalStudents || 0;
+            statTeamsReg.textContent = record.totalTeams || 0;
+            statStudentsActive.textContent = record.activeParticipants || 0;
+            statTeamsActive.textContent = record.activeTeams || 0;
+            headRank.textContent = `Official Rank #${record.rank} · ${ordinal(record.rank)}`;
+            headRank.hidden = false;
+          } else {
+            // Fallback to in-app points until verified leaderboard data is available.
+            statStudentsReg.textContent = Math.floor((data.points || 0) / 10);
+            statTeamsReg.textContent = data.successfulRegistrations || 0;
+            statStudentsActive.textContent = data.activeReferrals || 0;
+            statTeamsActive.textContent = data.activeTeams || 0;
+          }
 
           const refCode = data.referralCode || ('GAAC-' + user.uid.substring(0, 3));
           refCodeDisplay.textContent = refCode;
@@ -233,6 +860,28 @@
 
           loadingState.classList.add('hidden');
           dashContent.classList.remove('hidden');
+
+          // Ambassador Prizes & Rewards rendering
+          const userRank = record ? record.rank : null;
+          const totalRegStudents = record ? (record.totalStudents || 0) : Math.floor((data.points || 0) / 10);
+
+          renderAmbassadorPrizes(userRank, totalRegStudents);
+
+          // Ambassador certificate (from official verified leaderboard data)
+          if (record) {
+            const certCard = document.getElementById('amb-cert-card');
+            const rankEl = document.getElementById('amb-cert-rank');
+            const certLink = document.getElementById('amb-cert-link');
+            if (certCard) {
+              rankEl.textContent = `Official Rank #${record.rank} · ${ordinal(record.rank)}`;
+              document.getElementById('amb-cert-students-reg').textContent = record.totalStudents || 0;
+              document.getElementById('amb-cert-teams-reg').textContent = record.totalTeams || 0;
+              document.getElementById('amb-cert-students-active').textContent = record.activeParticipants || 0;
+              document.getElementById('amb-cert-teams-active').textContent = record.activeTeams || 0;
+              certLink.href = `ambassador-certificate.html?ref=${encodeURIComponent(record.code || refCode)}`;
+              certCard.hidden = false;
+            }
+          }
         } catch (e) {
           console.error('Dashboard error:', e);
           loadingState.innerHTML = '<p>Error loading dashboard. Please try again later.</p>';

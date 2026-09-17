@@ -543,6 +543,29 @@ allow delete: if isAdmin();
     }
 
     // ================================================================
+    // 12) OFFICIAL GAAC 2026 RESULTS (read-only leaderboard + certs)
+    //     rankings/{teamId} — every registered team with its final rank and
+    //     honor/award plus the full member roster (DQ members flagged with
+    //     isDQ so they get no certificate and stay off the leaderboard).
+    //     members/{email} — one doc per participant, keyed by email, exposing
+    //     their final rank, award/distinction and certificate id (certId).
+    //     Both are PUBLIC READ for the leaderboard, certificate portal and
+    //     team dashboard; WRITES are admin-only (imported from the official
+    //     results spreadsheet).
+    // ================================================================
+    match /rankings/{teamId} {
+      allow get: if true;
+      allow list: if true;
+      allow write: if isAdmin();
+    }
+
+    match /members/{memberId} {
+      allow get: if true;
+      allow list: if true;
+      allow write: if isAdmin();
+    }
+
+    // ================================================================
     // DENY ALL OTHER ACCESS
     // ================================================================
     match /{document=**} {

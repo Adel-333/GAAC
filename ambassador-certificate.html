@@ -1,0 +1,760 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>GAAC 2026 Ambassador Certificate</title>
+  <link rel="icon" href="images/GAAC Dark.jpg" type="image/jpeg" />
+
+  <!-- Google Fonts -->
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Orbitron:wght@600;700;800;900&family=Audiowide&family=Rajdhani:wght@600;700&family=Cormorant+Garamond:ital,wght@0,400;0,500;0,600;0,700;1,400;1,600;1,700&family=EB+Garamond:ital,wght@0,400;0,500;0,600;1,400&family=Cinzel:wght@700;800;900&family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
+
+  <style>
+    /* ==========================================================================
+       PAGE & SCREEN MECHANICS (A4 PORTRAIT)
+       ========================================================================== */
+    @page {
+      size: A4 portrait;
+      margin: 0;
+    }
+
+    *, *::before, *::after {
+      box-sizing: border-box;
+      margin: 0;
+      padding: 0;
+    }
+
+    html, body {
+      width: 100%;
+      height: 100%;
+      background-color: #060911;
+      font-family: 'Times New Roman', 'Cormorant Garamond', Georgia, serif;
+      -webkit-print-color-adjust: exact !important;
+      print-color-adjust: exact !important;
+      -webkit-font-smoothing: antialiased;
+      -moz-osx-font-smoothing: grayscale;
+      text-rendering: optimizeLegibility;
+      overflow: hidden;
+    }
+
+    /* Corner Toolbar (away from the certificate art, auto-hides) */
+    .cert-toolbar {
+      position: fixed;
+      bottom: 22px;
+      right: 22px;
+      top: auto;
+      left: auto;
+      transform: none;
+      z-index: 9999;
+      display: flex;
+      align-items: center;
+      gap: 10px;
+      background: rgba(15, 23, 42, 0.94);
+      border: 1px solid rgba(38, 183, 255, 0.35);
+      border-radius: 999px;
+      padding: 8px 14px;
+      box-shadow: 0 12px 32px rgba(0,0,0,0.75);
+      backdrop-filter: blur(14px);
+      animation: toolbarSlideIn 0.4s ease-out;
+      opacity: 1;
+      transition: opacity 0.35s ease, transform 0.35s ease;
+      cursor: default;
+      user-select: none;
+    }
+    .cert-toolbar.toolbar-hidden {
+      opacity: 0;
+      transform: translateY(14px);
+      pointer-events: none;
+    }
+    .cert-toolbar-trigger {
+      position: fixed;
+      bottom: 18px;
+      right: 18px;
+      width: 46px;
+      height: 46px;
+      z-index: 9998;
+      border-radius: 50%;
+      background: rgba(15, 23, 42, 0.94);
+      border: 1px solid rgba(38, 183, 255, 0.45);
+      color: var(--blue-light, #26b7ff);
+      display: none;
+      align-items: center;
+      justify-content: center;
+      cursor: pointer;
+      box-shadow: 0 8px 24px rgba(0,0,0,0.6);
+    }
+    body.toolbar-away .cert-toolbar-trigger { display: flex; }
+
+    @keyframes toolbarSlideIn {
+      from { opacity: 0; transform: translateY(20px); }
+      to { opacity: 1; transform: translateY(0); }
+    }
+
+    .cert-toolbar-btn {
+      display: inline-flex;
+      align-items: center;
+      gap: 7px;
+      padding: 8px 16px;
+      border-radius: 999px;
+      font-family: 'Inter', sans-serif;
+      font-size: 13px;
+      font-weight: 600;
+      border: 1px solid transparent;
+      cursor: pointer;
+      transition: all 0.18s ease;
+      color: #ffffff;
+      text-decoration: none;
+    }
+
+    .btn-pdf {
+      background: #0284c7;
+      border-color: #38bdf8;
+      box-shadow: 0 0 16px rgba(2, 132, 199, 0.4);
+    }
+    .btn-pdf:hover {
+      background: #0369a1;
+      transform: translateY(-1px);
+    }
+
+    .btn-close {
+      background: rgba(255, 255, 255, 0.08);
+      color: #cbd5e1;
+      border-color: rgba(255, 255, 255, 0.15);
+    }
+    .btn-close:hover {
+      background: rgba(239, 68, 68, 0.25);
+      color: #ff6b7a;
+      border-color: rgba(239, 68, 68, 0.5);
+    }
+
+    /* Screen Viewport Wrapper */
+    .cert-viewport {
+      position: absolute;
+      inset: 0;
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      overflow: hidden;
+      background: radial-gradient(circle at center, #111827 0%, #030712 100%);
+    }
+
+    /* Master Native High-Resolution Certificate Canvas (4419px x 6250px) */
+    .certificate-container {
+      position: absolute;
+      top: 50%;
+      left: 50%;
+      width: 4419px;
+      height: 6250px;
+      background-image: url('images/certificate_bg.webp');
+      background-size: 100% 100%;
+      background-repeat: no-repeat;
+      background-position: center;
+      background-color: #0c0f17;
+      box-shadow: 0 30px 100px rgba(0, 0, 0, 0.95);
+      transform-origin: center center;
+      user-select: none;
+      -webkit-user-select: none;
+      opacity: 0;
+      transition: opacity 0.35s ease-out;
+    }
+
+    .certificate-container.visible {
+      opacity: 1;
+    }
+
+    /* 1. Award Title + CERTIFICATE (Centered in Dark Space Banner) */
+    .dynamic-award-title {
+      position: absolute;
+      top: 1040px;
+      left: 0;
+      width: 4419px;
+      text-align: center;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      justify-content: center;
+    }
+
+    .award-main-text {
+      font-family: 'Orbitron', 'Audiowide', sans-serif;
+      font-size: 300px;
+      font-weight: 800;
+      color: #ffffff;
+      text-transform: uppercase;
+      letter-spacing: 0.08em;
+      line-height: 1.1;
+      text-shadow: 0 4px 16px rgba(0, 0, 0, 0.6);
+    }
+
+    .award-sub-text {
+      font-family: 'Orbitron', sans-serif;
+      font-size: 130px;
+      font-weight: 700;
+      color: #7dd3fc;
+      text-transform: uppercase;
+      letter-spacing: 0.28em;
+      line-height: 1;
+      margin-top: 12px;
+      text-shadow: 0 2px 10px rgba(0, 0, 0, 0.5);
+    }
+
+    /* 2. Name Section + Attached Dynamic Divider Line */
+    .name-section-wrap {
+      position: absolute;
+      top: 2380px;
+      left: 179px;
+      width: 4060px;
+      display: flex;
+      flex-direction: column;
+      align-items: flex-start;
+    }
+
+    .dynamic-participant-name {
+      width: 100%;
+      font-family: 'Orbitron', 'Audiowide', sans-serif;
+      font-size: 300px;
+      font-weight: 700;
+      color: #16467e;
+      text-transform: uppercase;
+      letter-spacing: 0.04em;
+      line-height: 1.22;
+      word-break: break-word;
+      text-align: left;
+    }
+
+    .dynamic-divider-line {
+      width: 100%;
+      height: 6px;
+      background: linear-gradient(90deg, #16467e 0%, #0a192f 30%, #000000 50%, #0a192f 70%, #16467e 100%);
+      margin-top: 45px;
+      border-radius: 3px;
+    }
+
+    /* Statement Plaque */
+    .statement-plaque {
+      width: 100%;
+      margin-top: 260px;
+      background: linear-gradient(135deg, rgba(255, 255, 255, 0.90) 0%, rgba(240, 246, 255, 0.78) 100%);
+      border: 3px solid rgba(22, 70, 126, 0.32);
+      border-radius: 32px;
+      padding: 55px 80px;
+      box-shadow: 0 20px 45px rgba(0, 0, 0, 0.07), inset 0 2px 8px rgba(255, 255, 255, 0.95);
+      position: relative;
+    }
+
+    .statement-plaque::before {
+      content: '';
+      position: absolute;
+      inset: 14px;
+      border: 2px dashed rgba(22, 70, 126, 0.25);
+      border-radius: 22px;
+      pointer-events: none;
+    }
+
+    .dynamic-recognition-statement {
+      width: 100%;
+      font-family: 'Cormorant Garamond', 'EB Garamond', Georgia, serif;
+      font-size: 132px;
+      color: #091024;
+      line-height: 1.5;
+      text-align: justify;
+      text-justify: inter-word;
+      font-weight: 500;
+      letter-spacing: 0.01em;
+    }
+
+    /* Referral Stats Row - removed (figures no longer shown on the certificate) */
+
+    /* 4a. Left Badge: Circular Rank Badge */
+    .dynamic-circle-badge {
+      position: absolute;
+      top: 4600px;
+      left: 250px;
+      width: 720px;
+      height: 720px;
+      border-radius: 50%;
+      background: linear-gradient(135deg, #1d5696 0%, #16467e 50%, #0e3059 100%);
+      border: 10px solid #ffffff;
+      box-shadow: 0 18px 40px rgba(0, 0, 0, 0.4), inset 0 3px 12px rgba(255, 255, 255, 0.4);
+      display: none;
+      align-items: center;
+      justify-content: center;
+      z-index: 10;
+    }
+
+    .dynamic-circle-badge.visible {
+      display: flex;
+    }
+
+    .circle-badge-inner {
+      width: 640px;
+      height: 640px;
+      border-radius: 50%;
+      border: 5px dashed #ffffff;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      justify-content: center;
+      text-align: center;
+      padding: 20px;
+    }
+
+    .badge-rank-text {
+      font-family: 'Orbitron', 'Audiowide', sans-serif;
+      font-size: 150px;
+      font-weight: 900;
+      color: #ffffff;
+      letter-spacing: 0.05em;
+      line-height: 1.08;
+      text-shadow: 0 3px 10px rgba(0, 0, 0, 0.5);
+    }
+
+    .badge-rank-caption {
+      font-family: 'Rajdhani', 'Orbitron', sans-serif;
+      font-size: 56px;
+      font-weight: 700;
+      color: rgba(255, 255, 255, 0.92);
+      letter-spacing: 0.14em;
+      text-transform: uppercase;
+      margin-top: 16px;
+    }
+
+    /* 5. Right Minted Circular Medal Seal */
+    .dynamic-seal-circle {
+      position: absolute;
+      top: 4600px;
+      right: 250px;
+      width: 720px;
+      height: 720px;
+      border-radius: 50%;
+      border: 10px solid #ffffff;
+      box-shadow: 0 20px 50px rgba(0, 0, 0, 0.45), inset 0 3px 14px rgba(255, 255, 255, 0.5);
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      z-index: 10;
+    }
+
+    .seal-inner-coin {
+      width: 640px;
+      height: 640px;
+      border-radius: 50%;
+      border: 5px dashed rgba(255, 255, 255, 0.85);
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      justify-content: center;
+      text-align: center;
+      padding: 20px;
+    }
+
+    .seal-text-line1 {
+      font-family: 'Cinzel', 'Orbitron', serif;
+      font-size: 104px;
+      font-weight: 900;
+      color: #ffffff;
+      text-transform: uppercase;
+      letter-spacing: 0.08em;
+      line-height: 1.05;
+      text-shadow: 0 3px 12px rgba(0, 0, 0, 0.6);
+    }
+
+    .seal-text-line2 {
+      font-family: 'Cinzel', 'Orbitron', serif;
+      font-size: 88px;
+      font-weight: 800;
+      color: #ffffff;
+      text-transform: uppercase;
+      letter-spacing: 0.12em;
+      line-height: 1.05;
+      margin-top: 8px;
+      text-shadow: 0 3px 12px rgba(0, 0, 0, 0.6);
+    }
+
+    .theme-gold { background: linear-gradient(135deg, #c59b27 0%, #dfba73 30%, #a67c1e 70%, #5c4103 100%); }
+    .theme-silver { background: linear-gradient(135deg, #94a3b8 0%, #cbd5e1 35%, #64748b 70%, #334155 100%); }
+    .theme-bronze { background: linear-gradient(135deg, #b45309 0%, #d97706 35%, #9a3412 70%, #431407 100%); }
+    .theme-final4 { background: linear-gradient(135deg, #1e3a8a 0%, #1e40af 35%, #0f172a 80%, #020617 100%); }
+    .theme-finalist { background: linear-gradient(135deg, #0369a1 0%, #0284c7 35%, #075985 70%, #0c2340 100%); }
+    .theme-honors { background: linear-gradient(135deg, #1e40af 0%, #3b82f6 35%, #1d4ed8 70%, #0f172a 100%); }
+
+    /* QR Code Container (Center) */
+    .dynamic-qr-container {
+      position: absolute;
+      top: 4600px;
+      left: 1940px;
+      width: 540px;
+      height: 540px;
+      background: #ffffff;
+      padding: 24px;
+      border-radius: 28px;
+      border: 8px solid #16467e;
+      box-shadow: 0 15px 35px rgba(0, 0, 0, 0.4);
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      z-index: 10;
+    }
+
+    .dynamic-qr-container img, .dynamic-qr-container canvas {
+      width: 100% !important;
+      height: 100% !important;
+      display: block;
+    }
+
+    /* 7. Certificate ID Number */
+    .dynamic-certificate-id {
+      position: absolute;
+      top: 5520px;
+      left: 1250px;
+      font-family: 'Orbitron', monospace;
+      font-size: 150px;
+      font-weight: 700;
+      color: #16467e;
+      letter-spacing: 0.05em;
+      text-align: left;
+    }
+
+    /* ==========================================================================
+       PRINT STYLES
+       ========================================================================== */
+    @media print {
+      @page { size: A4 portrait; margin: 0; }
+      html, body { width: 210mm !important; height: 297mm !important; background: transparent !important; overflow: hidden !important; }
+      .cert-toolbar { display: none !important; }
+      .cert-viewport { position: relative !important; width: 210mm !important; height: 297mm !important; margin: 0 !important; padding: 0 !important; background: transparent !important; display: block !important; overflow: hidden !important; }
+      .certificate-container { position: absolute !important; top: 0 !important; left: 0 !important; width: 4419px !important; height: 6250px !important; zoom: 0.1796786 !important; transform: none !important; box-shadow: none !important; -webkit-print-color-adjust: exact !important; print-color-adjust: exact !important; opacity: 1 !important; }
+    }
+  </style>
+</head>
+<body>
+
+  <!-- Corner Toolbar -->
+  <header class="cert-toolbar" id="certToolbar">
+    <button type="button" class="cert-toolbar-btn btn-pdf" id="btnPrintPdf" onclick="downloadPDF()">
+      <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><polyline points="6 9 6 2 18 2 18 9"></polyline><path d="M6 18H4a2 2 0 0 1-2-2v-5a2 2 0 0 1 2-2h16a2 2 0 0 1 2 2v5a2 2 0 0 1-2 2h-2"></path><rect x="6" y="14" width="12" height="8"></rect></svg>
+      Download PDF (A4)
+    </button>
+    <button type="button" class="cert-toolbar-btn btn-close" id="btnClose" onclick="closeViewer()">
+      Close &times;
+    </button>
+  </header>
+  <button type="button" class="cert-toolbar-trigger" id="certToolbarTrigger" aria-label="Show tools" onclick="showToolbar()">
+    <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round"><circle cx="12" cy="5" r="1.6" fill="currentColor"></circle><circle cx="12" cy="12" r="1.6" fill="currentColor"></circle><circle cx="12" cy="19" r="1.6" fill="currentColor"></circle></svg>
+  </button>
+
+  <!-- Viewport Scaler -->
+  <main class="cert-viewport" id="certViewport">
+    <article class="certificate-container" id="certificate">
+
+      <!-- 1. Award Title + CERTIFICATE -->
+      <div class="dynamic-award-title" id="awardTitle">
+        <span class="award-main-text" id="awardMainText">AMBASSADOR</span>
+        <span class="award-sub-text">CERTIFICATE</span>
+      </div>
+
+      <!-- 2. Name + Divider + Plaque -->
+      <div class="name-section-wrap" id="nameSectionWrap">
+        <div class="dynamic-participant-name" id="participantName">AMBASSADOR NAME</div>
+        <div class="dynamic-divider-line"></div>
+        <div class="statement-plaque" id="statementPlaque">
+          <div class="dynamic-recognition-statement" id="recognitionStatement"></div>
+        </div>
+      </div>
+
+      <!-- 4. Left Circular Rank Badge -->
+      <div class="dynamic-circle-badge" id="circleBadge">
+        <div class="circle-badge-inner">
+          <span class="badge-rank-text" id="badgeRankText">#1</span>
+          <span class="badge-rank-caption" id="badgeRankCaption">Ambassador Rank</span>
+        </div>
+      </div>
+
+      <!-- 5. Center QR Code -->
+      <div class="dynamic-qr-container" id="qrContainer">
+        <div id="qrcode"></div>
+      </div>
+
+      <!-- 6. Right Minted Circular Medal Seal -->
+      <div class="dynamic-seal-circle" id="sealCircle">
+        <div class="seal-inner-coin">
+          <span class="seal-text-line1" id="sealTextLine1">AMBASSADOR</span>
+          <span class="seal-text-line2" id="sealTextLine2">2026</span>
+        </div>
+      </div>
+
+      <!-- 7. Bottom Certificate ID -->
+      <div class="dynamic-certificate-id" id="certificateId">GAAC-032</div>
+
+    </article>
+  </main>
+
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/html2canvas/1.4.1/html2canvas.min.js"></script>
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/jspdf/2.5.1/jspdf.umd.min.js"></script>
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/qrcodejs/1.0.0/qrcode.min.js"></script>
+  <script src="ambassador_cert_data.js"></script>
+
+  <script>
+    function ordinal(n) {
+      const s = ['th', 'st', 'nd', 'rd'];
+      const v = n % 100;
+      return n + (s[(v - 20) % 10] || s[v] || s[0]);
+    }
+
+    function rankOrdinal(r) {
+      const n = parseInt(r, 10) || 0;
+      if (n === 1) return '1ST';
+      if (n === 2) return '2ND';
+      if (n === 3) return '3RD';
+      if (n === 4) return '4TH';
+      return '#' + n;
+    }
+
+    function generateAmbassadorStatement(r, teams, members, active, totalAmbassadors) {
+      const ord = ordinal(r);
+      return `In recognition of outstanding outreach and dedicated service as a verified GAAC 2026 Ambassador, successfully referring ${teams} team${teams === 1 ? '' : 's'} and ${members} student${members === 1 ? '' : 's'}, of whom ${active} actively participated in the Round 1 Qualification Exam. This certificate proudly ranks ${ord} among ${totalAmbassadors} verified ambassadors worldwide.`;
+    }
+
+    function adjustScale() {
+      const container = document.getElementById('certificate');
+      const viewport = document.getElementById('certViewport');
+      if (!container || !viewport) return;
+
+      const isEmbedded = window.self !== window.top;
+      const padTop = isEmbedded ? 10 : 70;
+      const padSide = 20;
+
+      const availWidth = Math.max(viewport.clientWidth - (padSide * 2), 200);
+      const availHeight = Math.max(viewport.clientHeight - padTop - 20, 200);
+
+      const scale = Math.min(availWidth / 4419, availHeight / 6250);
+      container.style.transform = `translate(-50%, -50%) scale(${scale})`;
+      container.classList.add('visible');
+    }
+
+    window.addEventListener('resize', adjustScale);
+    window.addEventListener('DOMContentLoaded', adjustScale);
+
+    function bindData(data) {
+      if (!data) return;
+
+      const rNum = parseInt(data.rank, 10) || 999;
+      const totalAmbassadors = (window.GAAC_AMBASSADOR_LEADERBOARD || []).length || 468;
+
+      // 1. Award title
+      document.getElementById('awardMainText').textContent = 'AMBASSADOR';
+
+      // 2. Name
+      const nameEl = document.getElementById('participantName');
+      const plaqueEl = document.getElementById('statementPlaque');
+      if (data.name) {
+        let nameParts = data.name.trim().split(/\s+/);
+        if (nameParts.length > 3) nameParts = nameParts.slice(0, 3);
+        const formattedName = nameParts.join(' ').toUpperCase();
+        nameEl.textContent = formattedName;
+        if (formattedName.length > 25) nameEl.style.fontSize = '210px';
+        else if (formattedName.length > 18) nameEl.style.fontSize = '245px';
+        else nameEl.style.fontSize = '300px';
+      }
+
+      // 3. Statement
+      const stmtEl = document.getElementById('recognitionStatement');
+      stmtEl.textContent = generateAmbassadorStatement(
+        rNum,
+        data.totalTeams || data.activeTeams || 0,
+        data.totalStudents || 0,
+        data.activeParticipants || 0,
+        totalAmbassadors
+      );
+
+      // 4. Left rank badge
+      const badgeEl = document.getElementById('badgeRankText');
+      badgeEl.textContent = rankOrdinal(rNum);
+      if (badgeEl.textContent.length > 4) badgeEl.style.fontSize = '115px';
+      else if (badgeEl.textContent.length > 3) badgeEl.style.fontSize = '140px';
+      else badgeEl.style.fontSize = '155px';
+      document.getElementById('circleBadge').classList.add('visible');
+
+      // 6. Right seal theme by tier
+      const sealCircle = document.getElementById('sealCircle');
+      const text1 = document.getElementById('sealTextLine1');
+      const text2 = document.getElementById('sealTextLine2');
+      sealCircle.className = 'dynamic-seal-circle';
+
+      if (rNum === 1) {
+        sealCircle.classList.add('theme-gold');
+        text1.textContent = 'GOLD';
+        text2.textContent = 'MEDAL';
+      } else if (rNum === 2) {
+        sealCircle.classList.add('theme-silver');
+        text1.textContent = 'SILVER';
+        text2.textContent = 'MEDAL';
+      } else if (rNum === 3) {
+        sealCircle.classList.add('theme-bronze');
+        text1.textContent = 'BRONZE';
+        text2.textContent = 'MEDAL';
+      } else if (rNum <= 10) {
+        sealCircle.classList.add('theme-final4');
+        text1.textContent = 'TOP 10';
+        text2.textContent = 'MEDAL';
+      } else if (rNum <= 50) {
+        sealCircle.classList.add('theme-finalist');
+        text1.textContent = 'TOP 50';
+        text2.textContent = 'MEDAL';
+      } else {
+        sealCircle.classList.add('theme-honors');
+        text1.textContent = 'GAAC 2026';
+        text2.textContent = 'MEDAL';
+      }
+
+      // 7. QR Code
+      const qrContainer = document.getElementById('qrcode');
+      qrContainer.innerHTML = '';
+      const certId = data.code || `GAAC-AMB-${webpad(rNum)}`;
+      const verificationUrl = `https://gaac.stemastronomyclub.org/ambassador.html?ref=${encodeURIComponent(certId)}`;
+      new QRCode(qrContainer, {
+        text: verificationUrl,
+        width: 480,
+        height: 480,
+        colorDark: "#16467e",
+        colorLight: "#ffffff",
+        correctLevel: QRCode.CorrectLevel.H
+      });
+
+      // 8. Certificate ID
+      document.getElementById('certificateId').textContent = certId;
+
+      document.title = 'GAAC 2026 Ambassador Certificate - ' + (data.name || 'Ambassador');
+      window.currentCertData = data;
+    }
+
+    function webpad(n) {
+      var s = String(n);
+      while (s.length < 3) s = '0' + s;
+      return s;
+    }
+
+    function initFromParams() {
+      const params = new URLSearchParams(window.location.search);
+      const email = (params.get('email') || '').trim().toLowerCase();
+      let ref = (params.get('ref') || params.get('code') || '').trim().toUpperCase();
+
+      let record = null;
+      if (email) {
+        record = (window.GAAC_AMBASSADOR_LEADERBOARD || []).find(a => (a.email || '').toLowerCase() === email);
+      }
+      if (!record && ref) {
+        record = (window.GAAC_AMBASSADOR_LEADERBOARD || []).find(a => (a.code || '').toUpperCase() === ref);
+      }
+      if (!record && email) {
+        // Fallback: exact substring match on email
+        record = (window.GAAC_AMBASSADOR_LEADERBOARD || []).find(a => (a.email || '').toLowerCase().indexOf(email) !== -1);
+      }
+
+      if (!record) {
+        document.getElementById('recognitionStatement').textContent =
+          'We could not find an ambassador certificate matching the requested reference code or email. Please contact the GAAC organizing committee for assistance.';
+        document.getElementById('circleBadge').classList.add('visible');
+        document.getElementById('badgeRankText').textContent = '--';
+        return;
+      }
+
+      bindData(record);
+    }
+
+    async function downloadPDF() {
+      const btn = document.getElementById('btnPrintPdf');
+      const origText = btn ? btn.innerHTML : '';
+      if (btn) {
+        btn.innerHTML = 'Generating PDF...';
+        btn.style.pointerEvents = 'none';
+      }
+
+      try {
+        await document.fonts.ready;
+        const cert = document.getElementById('certificate');
+
+        const prevTransform = cert.style.transform;
+        cert.style.transform = 'none';
+
+        const name = (document.getElementById('participantName').textContent || 'GAAC_Ambassador_Certificate').trim().replace(/\s+/g, '_');
+
+        const canvas = await html2canvas(cert, {
+          scale: 0.473,
+          useCORS: true,
+          allowTaint: true,
+          backgroundColor: '#0c0f17',
+          width: 4419,
+          height: 6250,
+          scrollX: 0,
+          scrollY: 0,
+          logging: false
+        });
+
+        cert.style.transform = prevTransform;
+
+        const imgData = canvas.toDataURL('image/png');
+        const { jsPDF } = window.jspdf;
+        const pdf = new jsPDF({
+          orientation: 'portrait',
+          unit: 'mm',
+          format: 'a4',
+          compress: false
+        });
+
+        pdf.addImage(imgData, 'PNG', 0, 0, 210, 297, undefined, 'NONE');
+        pdf.save(`${name}_GAAC_2026_Ambassador_Certificate.pdf`);
+      } catch (err) {
+        console.error('PDF Generation error:', err);
+        window.print();
+      } finally {
+        if (btn) {
+          btn.innerHTML = origText;
+          btn.style.pointerEvents = 'auto';
+        }
+      }
+    }
+
+    function closeViewer() {
+      if (window.history.length > 1) {
+        window.history.back();
+      } else {
+        window.location.href = 'ambassador-dashboard.html';
+      }
+    }
+
+    // Auto-hide corner toolbar so the certificate is clean for screenshots.
+    const toolbar = document.getElementById('certToolbar');
+    const toolbarTrigger = document.getElementById('certToolbarTrigger');
+    let hideTimer = null;
+    function autoHideToolbar() {
+      if (!toolbar) return;
+      document.body.classList.add('toolbar-away');
+      toolbar.classList.add('toolbar-hidden');
+    }
+    function showToolbar() {
+      if (!toolbar) return;
+      document.body.classList.remove('toolbar-away');
+      toolbar.classList.remove('toolbar-hidden');
+      clearTimeout(hideTimer);
+      hideTimer = setTimeout(autoHideToolbar, 6000);
+    }
+    window.showToolbar = showToolbar;
+    if (toolbar) {
+      toolbar.addEventListener('pointermove', () => {
+        clearTimeout(hideTimer);
+        hideTimer = setTimeout(autoHideToolbar, 6000);
+      });
+      hideTimer = setTimeout(autoHideToolbar, 6000);
+    }
+    if (toolbarTrigger) {
+      // Keep the trigger reachable even when the page is idle.
+      toolbarTrigger.addEventListener('click', () => { document.body.classList.remove('toolbar-away'); toolbar.classList.remove('toolbar-hidden'); });
+    }
+
+    window.addEventListener('load', initFromParams);
+  </script>
+</body>
+</html>

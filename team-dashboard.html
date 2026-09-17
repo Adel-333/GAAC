@@ -79,6 +79,40 @@
     /* Competitions panel */
     .competitions-panel { margin-top: 32px; padding-top: 24px; border-top: 1px solid rgba(255,255,255,0.08); }
     .comp-head h2 { font-size: 1.15rem; margin: 0 0 4px; }
+    .badge-pill {
+      display: inline-flex; align-items: center; gap: 6px; margin-top: 10px;
+      padding: 4px 12px; border-radius: 999px; font-size: 0.72rem; font-weight: 700;
+      letter-spacing: 0.04em; border: 1px solid; text-transform: uppercase;
+    }
+    .badge-dq { color: #ff9aa5; border-color: rgba(239,68,68,0.4); background: rgba(239,68,68,0.12); }
+    .badge-gold { color: #ffd700; border-color: rgba(255,215,0,0.45); background: rgba(255,215,0,0.10); }
+    .badge-silver { color: #cdd6e4; border-color: rgba(205,214,228,0.4); background: rgba(205,214,228,0.10); }
+    .badge-bronze { color: #e0a878; border-color: rgba(224,168,120,0.4); background: rgba(224,168,120,0.10); }
+    .badge-blue { color: #8ac4ff; border-color: rgba(38,183,255,0.4); background: rgba(38,183,255,0.10); }
+    .badge-purple { color: #b9a7ff; border-color: rgba(167,139,250,0.4); background: rgba(167,139,250,0.10); }
+    .badge-slate { color: #9aa5b5; border-color: rgba(154,165,181,0.35); background: rgba(154,165,181,0.08); }
+    .cert-action { margin-top: 10px; }
+    .cert-action a, .cert-action span {
+      display: inline-flex; align-items: center; gap: 6px; font-size: 0.78rem; font-weight: 600;
+    }
+    .cert-action .cert-ok { color: var(--cyan); text-decoration: none; border-bottom: 1px dashed rgba(38,183,255,0.4); padding-bottom: 1px; }
+    .cert-action .cert-off { color: #7b8494; }
+    .results-card {
+      margin-top: 18px; padding: 20px 22px; border-radius: 14px;
+      border: 1px solid rgba(38,183,255,0.22); background: linear-gradient(180deg, rgba(38,183,255,0.07), rgba(10,14,23,0.55));
+    }
+    .results-card .rc-title {
+      font-family: var(--font-orbitron); font-size: 0.66rem; font-weight: 700;
+      letter-spacing: 0.16em; text-transform: uppercase; color: var(--muted);
+    }
+    .results-card .rc-row {
+      display: flex; align-items: baseline; gap: 14px; flex-wrap: wrap; margin-top: 6px;
+    }
+    .results-card .rc-rank { font-family: var(--font-orbitron); font-size: 1.25rem; font-weight: 800; letter-spacing: 0.05em; color: var(--cyan); }
+    .results-card .rc-award { font-size: 1.15rem; font-weight: 800; color: var(--white); letter-spacing: 0.02em; }
+    .results-card .rc-team-line { margin-top: 14px; padding-top: 12px; border-top: 1px dashed rgba(255,255,255,0.12); }
+    .results-card .rc-meta { font-size: 0.82rem; color: var(--muted); margin-top: 6px; line-height: 1.7; }
+    .results-card .rc-btn { margin-top: 14px; }
     .comp-head .sub { font-size: 0.84rem; color: var(--muted); margin-bottom: 18px; }
     .comp-tabs { display: grid; grid-template-columns: repeat(auto-fit, minmax(120px, 1fr)); gap: 10px; margin-bottom: 18px; }
     .comp-tab {
@@ -211,6 +245,93 @@
       .status-info-box { padding: 12px 10px; font-size: 0.8rem; }
       .status-info-row { font-size: 0.78rem; line-height: 1.5; }
     }
+
+    /* ===== Prizes / reward codes ===== */
+    .prize-section { margin-bottom: 14px; overflow: hidden; border-radius: 14px; }
+    .prize-section-head {
+      display: flex; align-items: center; justify-content: space-between; gap: 12px;
+      width: 100%; padding: 16px 18px; text-align: left;
+      background: linear-gradient(135deg, rgba(38,183,255,0.10), rgba(38,183,255,0.03));
+      border: 1px solid rgba(38,183,255,0.22); border-radius: 14px;
+      cursor: pointer; transition: border-color 220ms, background 220ms;
+      font-family: 'Inter', sans-serif; color: var(--white);
+    }
+    .prize-section-head:hover { border-color: rgba(38,183,255,0.55); background: linear-gradient(135deg, rgba(38,183,255,0.16), rgba(38,183,255,0.05)); }
+    .prize-section-head .ps-left { display: flex; align-items: center; gap: 12px; min-width: 0; }
+    .prize-section-head .ps-title { font-weight: 800; font-size: 0.92rem; letter-spacing: 0.02em; }
+    .prize-section-head .ps-count { font-size: 0.7rem; color: var(--muted); letter-spacing: 0.1em; text-transform: uppercase; margin-top: 3px; }
+    .prize-section-head .ps-chev {
+      flex: 0 0 auto; color: var(--cyan); font-size: 1rem; transition: transform 260ms ease;
+      line-height: 1; transform: rotate(0deg);
+    }
+    .prize-section-head[aria-expanded="true"] .ps-chev { transform: rotate(180deg); }
+    .prize-section-body {
+      max-height: 0; overflow: hidden; opacity: 0;
+      transition: max-height 360ms cubic-bezier(0.4,0,0.2,1), opacity 300ms ease, margin 300ms ease;
+      margin-top: 0;
+    }
+    .prize-section.open .prize-section-body {
+      max-height: 6000px; opacity: 1; margin-top: 12px;
+    }
+    .prize-card-box {
+      border: 1px solid rgba(255,255,255,0.09);
+      background: linear-gradient(180deg, rgba(255,255,255,0.035), rgba(10,14,23,0.35));
+      border-radius: 12px; padding: 16px 18px; margin-bottom: 10px;
+      animation: prize-in 380ms ease both;
+    }
+    .prize-card-box:nth-child(2) { animation-delay: 60ms; }
+    .prize-card-box:nth-child(3) { animation-delay: 120ms; }
+    .prize-card-box:nth-child(4) { animation-delay: 180ms; }
+    .prize-card-box:nth-child(5) { animation-delay: 240ms; }
+    .prize-card-box:nth-child(6) { animation-delay: 300ms; }
+    @keyframes prize-in {
+      from { opacity: 0; transform: translateY(8px); }
+      to { opacity: 1; transform: translateY(0); }
+    }
+    .prize-name-row { display: flex; align-items: center; justify-content: space-between; gap: 10px; flex-wrap: wrap; }
+    .prize-name { display: flex; align-items: center; gap: 8px; font-weight: 700; font-size: 0.95rem; color: var(--white); }
+    .prize-name .prize-dot { width: 7px; height: 7px; border-radius: 50%; background: var(--cyan); box-shadow: 0 0 8px var(--cyan); flex: 0 0 auto; }
+    .prize-code {
+      font-family: 'Orbitron', monospace; font-size: 0.76rem; font-weight: 700;
+      letter-spacing: 0.06em; color: var(--cyan);
+      background: rgba(38,183,255,0.09); border: 1px solid rgba(38,183,255,0.35);
+      padding: 5px 8px 5px 12px; border-radius: 9px; word-break: break-all; text-align: right;
+      display: inline-flex; align-items: center; gap: 6px;
+    }
+    .prize-code .copy-btn {
+      cursor: pointer; color: var(--blue-light);
+      background: rgba(38,183,255,0.15); border: 1px solid rgba(38,183,255,0.4);
+      font-size: 0.8rem; line-height: 1; padding: 5px 9px; border-radius: 6px;
+      transition: background 180ms, color 180ms;
+    }
+    .prize-code .copy-btn:hover { background: rgba(38,183,255,0.3); color: var(--white); }
+    .prize-inst {
+      font-size: 0.79rem; color: var(--muted); line-height: 1.7; margin-top: 10px;
+      border-top: 1px dashed rgba(255,255,255,0.08); padding-top: 10px;
+    }
+    .prize-inst ol { margin: 4px 0 0; padding-left: 18px; }
+    .prize-inst ol li { margin-top: 4px; }
+    .prize-inst ul { margin: 4px 0 0; padding-left: 18px; }
+    .prize-inst ul li { margin-top: 4px; }
+    .prize-inst .inst-head {
+      display: block; font-size: 0.66rem; letter-spacing: 0.14em; text-transform: uppercase;
+      color: var(--blue-light); font-weight: 700; margin-bottom: 6px;
+    }
+    .prize-note {
+      font-style: italic; color: #a5b4fc; font-size: 0.76rem; margin-top: 8px;
+      background: rgba(99,102,241,0.08); border: 1px solid rgba(99,102,241,0.2);
+      padding: 8px 12px; border-radius: 8px; line-height: 1.6;
+    }
+    .prize-empty {
+      border: 1px dashed rgba(38,183,255,0.25); border-radius: 12px; padding: 22px 18px;
+      text-align: center; color: var(--muted); font-size: 0.82rem; line-height: 1.6;
+    }
+    details.prize-details { margin-top: 8px; }
+    details.prize-details summary {
+      cursor: pointer; font-size: 0.74rem; color: var(--blue-light);
+      font-weight: 600; letter-spacing: 0.04em;
+    }
+    details.prize-details .prize-inst { margin-top: 6px; padding-left: 4px; }
     </style>
 </head>
 <body class="page-home">
@@ -368,7 +489,25 @@
           </div>
         </div>
 
-                    <!-- 1st Place Panel (Suceava Lovers 224 - Romania) -->
+        <!-- Official GAAC 2026 Results -->
+        <div id="official-results-panel" class="competitions-panel hidden">
+          <div class="comp-head">
+            <h2><span class="text-blue">Official GAAC 2026 Results</span></h2>
+            <p class="sub">Your team's final result, straight from the official leaderboard.</p>
+          </div>
+          <div class="results-card" id="official-results-card"></div>
+        </div>
+
+        <!-- Rewards & Prize Codes -->
+        <div id="prizes-panel" class="competitions-panel hidden">
+          <div class="comp-head">
+            <h2><span class="text-blue">Rewards &amp; Prize Codes</span></h2>
+            <p class="sub">Your official GAAC 2026 prizes, codes, and redemption instructions.</p>
+          </div>
+<div id="prizes-card"></div>
+        </div>
+
+        <!-- 1st Place Panel (Suceava Lovers 224 - Romania) -->
           <div id="first-place-panel" class="competitions-panel hidden">
             <div class="comp-head">
               <h2><span style="color:#ffd700;">1st Place — GAAC 2026 Champions</span></h2>
@@ -626,6 +765,7 @@
   <datalist id="country-list"></datalist>
 
   <script src="script.js"></script>
+  <script src="awards-data.js"></script>
   <script type="module">
     import { initializeApp } from "https://www.gstatic.com/firebasejs/10.12.2/firebase-app.js";
     import { getAuth, onAuthStateChanged, signOut, signInWithEmailAndPassword, createUserWithEmailAndPassword, setPersistence, browserSessionPersistence } from "https://www.gstatic.com/firebasejs/10.12.2/firebase-auth.js";
@@ -676,6 +816,7 @@ const app = initializeApp(firebaseConfig);
     let isLeader = false;
     let registrationOpen = true;
     let currentMemberRole = 'leader';
+    let officialMembersMap = new Map();
 
     const showAlert = (el, msg, isError = true) => {
       el.textContent = msg;
@@ -847,6 +988,21 @@ const app = initializeApp(firebaseConfig);
         else if (norm((currentRegData.member3 && currentRegData.member3.email) || '') === userEmail) matchedSlot = 'member3';
         currentMemberRole = matchedSlot;
 
+        // Load official GAAC 2026 results for every roster slot
+        // (badges/certificates come from the members collection).
+        officialMembersMap = new Map();
+        const memberEmails = [currentRegData.leader?.email, currentRegData.member2?.email, currentRegData.member3?.email]
+          .filter(Boolean)
+          .map(e => norm(e));
+        await Promise.all(memberEmails.map(async (em) => {
+          try {
+            const memSnap = await getDoc(doc(db, 'members', em));
+            if (memSnap.exists()) officialMembersMap.set(em, memSnap.data());
+          } catch (err) {
+            console.warn('Official member record unavailable for', em, err.message || err);
+          }
+        }));
+
 // Competition control + Round 1 schedule. Registration-open only
         // gates the leader's roster tools; the Round 1 countdown is for everyone.
         const compSnap = await getDoc(doc(db, 'settings', 'competition'));
@@ -900,12 +1056,28 @@ const app = initializeApp(firebaseConfig);
         const isLeaderCard = m.key === 'leader';
         const card = document.createElement('div');
         card.className = `member-card${isLeaderCard ? ' leader' : ''}`;
+        const official = officialMembersMap.get(norm(m.data.email));
         let html = `
           <div class="m-head">
             <div class="m-name">${escapeHtml(m.data.name)}</div>
             <div class="m-role">${m.label}</div>
           </div>
           <div class="m-row"><strong>Email:</strong> ${escapeHtml(m.data.email)}</div>`;
+        if (official) {
+          if (official.isDQ) {
+            html += `<div class="badge-pill badge-dq">Disqualified</div>`;
+          } else if (official.distinction) {
+            const prefix = official.badge ? `${escapeHtml(official.badge)} ` : '';
+            html += `<div class="badge-pill ${distinctionBadgeClass(official.distinction)}">${prefix}${escapeHtml(official.distinction)}</div>`;
+          }
+          if (official.isDQ) {
+            html += `<div class="cert-action"><span class="cert-off">No certificate</span></div>`;
+          } else if (official.hasCertificate) {
+            html += `<div class="cert-action"><a class="cert-ok" href="certificate-view.html?team=${encodeURIComponent(currentTeamId)}&email=${encodeURIComponent(m.data.email)}">Download Certificate &rarr;</a></div>`;
+          } else {
+            html += `<div class="cert-action"><span class="cert-off">Certificate not available</span></div>`;
+          }
+        }
         card.innerHTML = html;
         grid.appendChild(card);
       });
@@ -932,8 +1104,10 @@ const app = initializeApp(firebaseConfig);
 
       // Delete/withdraw control (top-right icon) — removed for GAAC 2026.
 
-      // Show the correct competition status panel based on user email
-      applyCompetitionStatus(user && user.email);
+      // Show the correct official result panel based on user email
+      renderOfficialResults(user && user.email);
+
+      renderPrizes();
 
       loadingState.classList.add('hidden');
       dashContent.classList.remove('hidden');
@@ -1101,6 +1275,264 @@ const app = initializeApp(firebaseConfig);
       } else {
         if (certPanel) certPanel.classList.remove('hidden');
       }
+    }
+
+    const DISTINCTION_COLORS = {
+      champion: 'badge-gold',
+      'first runner up': 'badge-silver',
+      'second runner up': 'badge-bronze',
+      'grand finalist': 'badge-blue',
+      'distinguished finalist': 'badge-blue',
+      finalist: 'badge-slate',
+      'high honors': 'badge-purple',
+      honors: 'badge-purple',
+      participation: 'badge-slate'
+    };
+
+    function distinctionBadgeClass(distinction) {
+      const key = String(distinction || '').toLowerCase().trim();
+      return DISTINCTION_COLORS[key] || 'badge-slate';
+    }
+
+    // ===== Prizes & reward codes =====
+    function rosterEmailsForAwards() {
+      return [currentRegData?.leader?.email, currentRegData?.member2?.email, currentRegData?.member3?.email]
+        .filter(Boolean)
+        .map(e => norm(e));
+    }
+
+    function prizeInstHtml(p) {
+      const inst = p.instructions || '';
+      if (!inst) return '';
+      const esc = escapeHtml(inst);
+      // Split on numbered steps "1)" if present, otherwise keep plain text.
+      if (/\n?1\)/.test(inst) || /^1\)/.test(inst.trim())) {
+        const parts = inst.split(/\n?(?=\d\))/).filter(Boolean);
+        const lis = parts.map(x => `<li>${escapeHtml(x.replace(/^\d\)\s*/, ''))}</li>`).join('');
+        return `<div class="prize-inst"><span class="inst-head">Activation Steps</span><ol>${lis}</ol></div>`;
+      }
+      return `<div class="prize-inst"><span class="inst-head">How to Redeem</span>${esc}</div>`;
+    }
+
+    function prizeCodeHtml(p) {
+      if (!p) return '';
+      const code = p.code || '';
+      let codeHtml = '';
+      if (code) {
+        codeHtml = `<span class="prize-code">${escapeHtml(code)}<button type="button" class="copy-btn" data-copy="${escapeHtml(code)}" title="Copy code">Copy</button></span>`;
+      }
+      const noteHtml = p.note ? `<div class="prize-note">${escapeHtml(p.note)}</div>` : '';
+      return `
+        <div class="prize-card-box">
+          <div class="prize-name-row">
+            <span class="prize-name"><span class="prize-dot"></span>${escapeHtml(p.name)}</span>
+            ${codeHtml}
+          </div>
+          ${noteHtml}
+          ${prizeInstHtml(p)}
+        </div>`;
+    }
+
+    function prizeSectionHtml(title, countLabel, itemsHtml) {
+      if (!itemsHtml) return '';
+      return `
+        <div class="prize-section" data-title="${title}">
+          <button type="button" class="prize-section-head" aria-expanded="false">
+            <span class="ps-left">
+              <span>
+                <span class="ps-title">${title}</span>
+                <span class="ps-count">${countLabel}</span>
+              </span>
+            </span>
+            <span class="ps-chev"><svg width="12" height="12" viewBox="0 0 16 16" fill="none" aria-hidden="true"><path d="M3 6l5 5 5-5" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/></svg></span>
+          </button>
+          <div class="prize-section-body">${itemsHtml}</div>
+        </div>`;
+    }
+
+    function renderPrizes() {
+      const panel = document.getElementById('prizes-panel');
+      const card = document.getElementById('prizes-card');
+      if (!panel || !card) return;
+      const A = window.GAAC_AWARDS;
+      if (!A) { panel.classList.add('hidden'); return; }
+
+      const teamId = (currentTeamId || '').toUpperCase().trim();
+      const userEmail = (auth.currentUser && auth.currentUser.email) || '';
+
+      // Never show rewards to disqualified members.
+      const dqEmails = new Set((A.disqualified && A.disqualified.emails) || []);
+      const myRecord = officialMembersMap.get(norm(userEmail));
+      if (myRecord && myRecord.isDQ) {
+        panel.classList.add('hidden');
+        return;
+      }
+      if (DQ_EMAILS.has(norm(userEmail)) || dqEmails.has(norm(userEmail))) {
+        panel.classList.add('hidden');
+        return;
+      }
+      const rosterEmails = rosterEmailsForAwards();
+      const teamAllDq = rosterEmails.length > 0 && rosterEmails.every((em) => {
+        const rec = officialMembersMap.get(em);
+        return DQ_EMAILS.has(em) || dqEmails.has(em) || (rec && rec.isDQ);
+      });
+      if (teamAllDq) {
+        panel.classList.add('hidden');
+        return;
+      }
+
+      // Team rewards -> visible to everyone in the team
+      let teamHtml = '';
+      const teamRewards = A.teamRewards && A.teamRewards[teamId];
+      if (teamRewards && teamRewards.items && teamRewards.items.length) {
+        const rews = teamRewards.items.map(it => prizeCodeHtml(it)).join('');
+        const teamInst = teamRewards.sharedInstructions
+          ? `<div class="prize-inst"><span class="inst-head">Important</span>${escapeHtml(teamRewards.sharedInstructions)}</div>`
+          : '';
+        teamHtml = prizeSectionHtml('Your Team Rewards', teamRewards.items.length + ' prize' + (teamRewards.items.length === 1 ? '' : 's'), rews + teamInst);
+      }
+
+      // Individual prizes -> only that member's own codes
+      let mineHtml = '';
+      if (userEmail) {
+        const mine = A.memberAwards && A.memberAwards[norm(userEmail)];
+        if (mine && mine.length) {
+          mineHtml = prizeSectionHtml('Your Individual Prizes', mine.length + ' prize' + (mine.length === 1 ? '' : 's'), mine.map(prizeCodeHtml).join(''));
+        }
+      }
+
+      // Participation rewards -> for everyone
+      let partHtml = '';
+      if (A.participation && A.participation.length) {
+        partHtml = prizeSectionHtml('Participation Rewards', 'Open to all participants', A.participation.map(prizeCodeHtml).join(''));
+      }
+
+      card.innerHTML = teamHtml + mineHtml + partHtml;
+
+      if (!teamHtml && !mineHtml && !partHtml) {
+        panel.classList.add('hidden');
+        return;
+      }
+      panel.classList.remove('hidden');
+
+      // Accordion toggle: the first section opens by default.
+      const heads = card.querySelectorAll('.prize-section-head');
+      heads.forEach((head, i) => {
+        const sec = head.closest('.prize-section');
+        head.addEventListener('click', () => {
+          const wasOpen = sec.classList.contains('open');
+          heads.forEach((h) => {
+            h.closest('.prize-section').classList.remove('open');
+            h.setAttribute('aria-expanded', 'false');
+          });
+          if (!wasOpen) {
+            sec.classList.add('open');
+            head.setAttribute('aria-expanded', 'true');
+          }
+        });
+        if (i === 0) {
+          sec.classList.add('open');
+          head.setAttribute('aria-expanded', 'true');
+        }
+      });
+
+      // Copy-to-clipboard handlers
+      card.querySelectorAll('.copy-btn').forEach((btn) => {
+        btn.addEventListener('click', async () => {
+          const val = btn.getAttribute('data-copy') || '';
+          btn.textContent = 'Copied';
+          try {
+            await navigator.clipboard.writeText(val);
+          } catch (e) {
+            const ta = document.createElement('textarea');
+            ta.value = val;
+            document.body.appendChild(ta);
+            ta.select();
+            try { document.execCommand('copy'); } catch (_) {}
+            document.body.removeChild(ta);
+          }
+          setTimeout(() => { btn.textContent = 'Copy'; }, 1500);
+        });
+      });
+    }
+
+    function renderOfficialResults(userEmail) {
+      const panel = document.getElementById('official-results-panel');
+      const card = document.getElementById('official-results-card');
+      if (!panel || !card) return;
+
+      // Hide every legacy competition/knockout panel for good.
+      ['first-place-panel', 'second-place-panel', 'final-panel', 'third-place-panel',
+       'fourth-place-panel', 'semifinal-panel', 'round8-panel', 'disqualified-panel',
+       'certificate-panel'].forEach(id => {
+        const el = document.getElementById(id);
+        if (el) el.classList.add('hidden');
+      });
+
+      const team =
+        currentRegData && currentRegData.teamName
+          ? currentRegData.teamName
+          : 'Your team';
+
+      // Team-level view: gather every roster member's official record.
+      const rosterEmails = [currentRegData?.leader?.email, currentRegData?.member2?.email, currentRegData?.member3?.email]
+        .filter(Boolean)
+        .map(em => norm(em));
+      const records = rosterEmails.map(em => officialMembersMap.get(em)).filter(Boolean);
+
+      if (records.length === 0) {
+        card.innerHTML = '<div class="rc-meta">Your team\'s official result was not found. Please contact us if you believe this is a mistake.</div>';
+        panel.classList.remove('hidden');
+        return;
+      }
+
+      const eligible = records.filter(r => !r.isDQ);
+
+      if (eligible.length === 0) {
+        card.innerHTML = `
+          <div class="rc-rank" style="color:#ff9aa5;">Disqualified</div>
+          <div class="rc-meta">Based on the official record, this team is not eligible for a certificate or a ranking in GAAC 2026.</div>
+          <div class="rc-meta" style="margin-top:8px;">Individual member status is shown on each roster card below.</div>`;
+      } else {
+        // Highest honor in the team = the best (lowest) official rank among eligible members.
+        const best = eligible.reduce((a, b) => {
+          const ra = typeof a.rank === 'number' && a.rank > 0 ? a.rank : 9999;
+          const rb = typeof b.rank === 'number' && b.rank > 0 ? b.rank : 9999;
+          return ra <= rb ? a : b;
+        });
+
+        const isParticipation =
+          !best ||
+          !best.award ||
+          /participation/i.test(best.award) ||
+          typeof best.rank !== 'number' ||
+          best.rank > 77;
+
+        const awardText = isParticipation ? 'Participation' : (best.award || 'Unranked');
+        const rankLine =
+          (!isParticipation && typeof best.rank === 'number' && best.rank > 0)
+            ? `<span class="rc-rank">Rank #${best.rank}</span>`
+            : '';
+
+        card.innerHTML = `
+          <div class="rc-title">Official Honor</div>
+          <div class="rc-row">
+            <div class="rc-award">${escapeHtml(awardText)}</div>
+            ${rankLine}
+          </div>
+          ${!isParticipation && best.distinction ? `<span class="badge-pill ${distinctionBadgeClass(best.distinction)}">${escapeHtml(best.distinction)}</span>` : ''}
+          <div class="rc-team-line">
+            <div class="rc-title" style="margin-bottom:2px;">Team</div>
+            <strong style="color:var(--white); font-size:1.05rem;">${escapeHtml(team)}</strong>
+          </div>`;
+      }
+
+      card.insertAdjacentHTML('beforeend', `
+        <div class="rc-btn">
+          <a class="button primary" style="font-size:0.82rem;" href="leaderboard.html">View Full Official Leaderboard &rarr;</a>
+        </div>`);
+
+      panel.classList.remove('hidden');
     }
 
     const R8_SCHEDULE = {
@@ -1301,14 +1733,8 @@ const app = initializeApp(firebaseConfig);
     }
 
     function r1CardTick() {
-      if (auth.currentUser) {
-        applyCompetitionStatus(auth.currentUser.email);
-        updateR8Countdown();
-        updateSfCountdown();
-      }
+      // Round 1 countdown disabled — the official results card replaces it.
     }
-    setInterval(r1CardTick, 1000);
-    r1CardTick();
 
     const btnEnterMock = document.getElementById('btn-enter-mock');
     if (btnEnterMock) {
