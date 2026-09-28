@@ -529,11 +529,125 @@
       return null;
     }
 
+    const CUSTOM_CERT_OVERRIDES = {
+      'GAAC-2026-0075-2': {
+        name: 'Mariam Salem Ahmed',
+        role: 'Team Member',
+        email: 'mariam.2425518@stembsweif.moe.edu.eg',
+        teamId: 'GAAC-2026-0075',
+        teamName: 'Astro girls',
+        rank: 75,
+        award: 'Honors',
+        badge: '#75',
+        school: 'Beni Suef STEM School',
+        country: 'Egypt',
+        isDQ: false,
+        certId: 'GAAC-2026-0075-2',
+        certIndex: 2,
+        status: 'Did Not Qualify'
+      },
+      'GAAC-2026-0339-1': {
+        name: 'Yousr Ahmed Elghareeb Ali Salem',
+        role: 'Team Leader',
+        email: 'yousrelghreeb277@gmail.com',
+        teamId: 'GAAC-2026-0339',
+        teamName: 'YRS',
+        rank: 23,
+        award: 'High Honors',
+        badge: '#23',
+        school: 'Saad Ibn Abi Waqqas Official Languages',
+        country: 'Egypt',
+        isDQ: false,
+        certId: 'GAAC-2026-0339-1',
+        certIndex: 1,
+        status: 'Qualified (Top 32)'
+      },
+      'GAAC-2026-1799-1': {
+        name: 'Abel Biruktesfa',
+        role: 'Team Leader',
+        email: 'tiotokos3121@gmail.com',
+        teamId: 'GAAC-2026-1799',
+        teamName: 'Tiotokos ETH',
+        rank: 83,
+        award: 'Participation',
+        badge: '',
+        school: 'Yihune Weldu Memorial Dessie Special Boarding School',
+        country: 'Ethiopia',
+        isDQ: false,
+        certId: 'GAAC-2026-1799-1',
+        certIndex: 1,
+        status: 'Did Not Qualify'
+      },
+      'GAAC-2026-HON-01': {
+        name: 'Dr. Hussein Farid',
+        role: 'Exam Reviewer & Scientific Advisor',
+        email: 'hussein.farid@gaac.org',
+        teamId: 'GAAC-2026-HON-01',
+        teamName: 'GAAC Scientific Committee',
+        rank: 0,
+        award: 'Academic Excellence',
+        badge: 'REVIEWER',
+        school: 'Scientific Committee',
+        country: 'Egypt',
+        isDQ: false,
+        certId: 'GAAC-2026-HON-01',
+        certIndex: 1,
+        status: 'Honorary'
+      },
+      'GAAC-2026-HON-02': {
+        name: 'Ms. Eman Shadi',
+        role: 'Club Supervisor & Lead Organizer',
+        email: 'eman.shadi@gaac.org',
+        teamId: 'GAAC-2026-HON-02',
+        teamName: 'GAAC Organizing Committee',
+        rank: 0,
+        award: 'Leadership Excellence',
+        badge: 'SUPERVISOR',
+        school: 'Supervisory Committee',
+        country: 'Egypt',
+        isDQ: false,
+        certId: 'GAAC-2026-HON-02',
+        certIndex: 1,
+        status: 'Honorary'
+      },
+      'GAAC-2026-HON-03': {
+        name: 'Sami Mohammed Suwailem',
+        role: 'Problem Author & Organizing Committee',
+        email: 'sami.suwailem@gaac.org',
+        teamId: 'GAAC-2026-HON-03',
+        teamName: 'GAAC Scientific Committee',
+        rank: 0,
+        award: 'Organizing Excellence',
+        badge: 'AUTHOR',
+        school: 'Scientific Committee',
+        country: 'Egypt',
+        isDQ: false,
+        certId: 'GAAC-2026-HON-03',
+        certIndex: 1,
+        status: 'Honorary'
+      }
+    };
+
     async function resolveRecord(params) {
       const { email, teamId, certN } = params;
 
+      if (teamId && certN) {
+        const fullId = `${teamId}-${certN}`.toUpperCase();
+        if (CUSTOM_CERT_OVERRIDES[fullId]) {
+          return CUSTOM_CERT_OVERRIDES[fullId];
+        }
+      } else if (teamId && CUSTOM_CERT_OVERRIDES[teamId.toUpperCase()]) {
+        return CUSTOM_CERT_OVERRIDES[teamId.toUpperCase()];
+      }
+
       if (email) {
-        const snap = await getDoc(doc(db, 'members', email.toLowerCase().trim()));
+        const cleanEmail = email.toLowerCase().trim();
+        for (const k in CUSTOM_CERT_OVERRIDES) {
+          if ((CUSTOM_CERT_OVERRIDES[k].email || '').toLowerCase() === cleanEmail) {
+            return CUSTOM_CERT_OVERRIDES[k];
+          }
+        }
+        const snap = await getDoc(doc(db, 'members', cleanEmail));
         if (!snap.exists()) return null;
         const d = snap.data();
         const rNum = Number(d.rank) || 0;

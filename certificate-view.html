@@ -742,6 +742,98 @@
         memberIdx = parseInt(m[2], 10) - 1;
       }
 
+      const CUSTOM_VIEW_OVERRIDES = {
+        'GAAC-2026-0075-2': {
+          team_id: 'GAAC-2026-0075',
+          team_name: 'Astro girls',
+          name: 'MARIAM SALEM AHMED',
+          role: 'Team Member',
+          award: 'HONORS',
+          rank: '75',
+          rank_number: '75',
+          team_rank: '#75',
+          certificate_id: 'GAAC-2026-0075-2'
+        },
+        'GAAC-2026-0339-1': {
+          team_id: 'GAAC-2026-0339',
+          team_name: 'YRS',
+          name: 'YOUSR AHMED ELGHAREEB',
+          role: 'Team Leader',
+          award: 'HIGH HONORS',
+          rank: '23',
+          rank_number: '23',
+          team_rank: '#23',
+          certificate_id: 'GAAC-2026-0339-1'
+        },
+        'GAAC-2026-1799-1': {
+          team_id: 'GAAC-2026-1799',
+          team_name: 'Tiotokos ETH',
+          name: 'ABEL BIRUKTESFA',
+          role: 'Team Leader',
+          award: 'PARTICIPATION',
+          rank: '83',
+          rank_number: '83',
+          team_rank: '#83',
+          certificate_id: 'GAAC-2026-1799-1'
+        },
+        'GAAC-2026-HON-01': {
+          team_id: 'GAAC-2026-HON-01',
+          team_name: 'GAAC Scientific Committee',
+          name: 'DR. HUSSEIN FARID',
+          role: 'Exam Reviewer',
+          award: 'ACADEMIC EXCELLENCE',
+          rank: '0',
+          rank_number: '0',
+          team_rank: '#0',
+          certificate_id: 'GAAC-2026-HON-01'
+        },
+        'GAAC-2026-HON-02': {
+          team_id: 'GAAC-2026-HON-02',
+          team_name: 'GAAC Organizing Committee',
+          name: 'MS. EMAN SHADI',
+          role: 'Club Supervisor',
+          award: 'LEADERSHIP EXCELLENCE',
+          rank: '0',
+          rank_number: '0',
+          team_rank: '#0',
+          certificate_id: 'GAAC-2026-HON-02'
+        },
+        'GAAC-2026-HON-03': {
+          team_id: 'GAAC-2026-HON-03',
+          team_name: 'GAAC Scientific Committee',
+          name: 'SAMI MOHAMMED SUWAILEM',
+          role: 'Problem Author',
+          award: 'ORGANIZING EXCELLENCE',
+          rank: '0',
+          rank_number: '0',
+          team_rank: '#0',
+          certificate_id: 'GAAC-2026-HON-03'
+        }
+      };
+
+      if (queryId && CUSTOM_VIEW_OVERRIDES[queryId.toUpperCase()]) {
+        bindData(CUSTOM_VIEW_OVERRIDES[queryId.toUpperCase()]);
+        return;
+      }
+      if (teamId && memberIdx && CUSTOM_VIEW_OVERRIDES[`${teamId}-${memberIdx + 1}`.toUpperCase()]) {
+        bindData(CUSTOM_VIEW_OVERRIDES[`${teamId}-${memberIdx + 1}`.toUpperCase()]);
+        return;
+      }
+      if (email) {
+        if (email.includes('yousrelghreeb')) {
+          bindData(CUSTOM_VIEW_OVERRIDES['GAAC-2026-0339-1']);
+          return;
+        }
+        if (email.includes('mariam.2425518') || email.includes('mariam.2425519')) {
+          bindData(CUSTOM_VIEW_OVERRIDES['GAAC-2026-0075-2']);
+          return;
+        }
+        if (email.includes('tiotokos3121')) {
+          bindData(CUSTOM_VIEW_OVERRIDES['GAAC-2026-1799-1']);
+          return;
+        }
+      }
+
       const ind = (email && GAAC_INDIVIDUAL_AWARDS[email]) ? GAAC_INDIVIDUAL_AWARDS[email] : null;
       let team = (teamId && GAAC_CERT_DATABASE[teamId]) ? GAAC_CERT_DATABASE[teamId] : null;
 

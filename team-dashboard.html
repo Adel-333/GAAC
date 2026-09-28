@@ -1073,7 +1073,9 @@ const app = initializeApp(firebaseConfig);
           if (official.isDQ) {
             html += `<div class="cert-action"><span class="cert-off">No certificate</span></div>`;
           } else if (official.hasCertificate) {
-            html += `<div class="cert-action"><a class="cert-ok" href="certificate-view.html?team=${encodeURIComponent(currentTeamId)}&email=${encodeURIComponent(m.data.email)}">Download Certificate &rarr;</a></div>`;
+            const memberCertIndex = m.key === 'leader' ? 1 : m.key === 'member2' ? 2 : 3;
+            const certLinkId = `${currentTeamId}-${memberCertIndex}`;
+            html += `<div class="cert-action"><a class="cert-ok" href="certificate.html?id=${encodeURIComponent(certLinkId)}">Download Certificate &rarr;</a></div>`;
           } else {
             html += `<div class="cert-action"><span class="cert-off">Certificate not available</span></div>`;
           }
