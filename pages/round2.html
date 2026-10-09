@@ -1,0 +1,295 @@
+<!DOCTYPE html>
+<html lang="en" translate="no">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="google" content="notranslate" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Round 2 Knockout | GAAC</title>
+  <link rel="icon" href="../images/GAAC Dark.jpg" type="image/jpeg" />
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+  <link href="https://fonts.googleapis.com/css2?family=Orbitron:wght@600;700;800;900&family=Inter:wght@400;500;600;700;800;900&display=swap" rel="stylesheet" />
+  <link rel="stylesheet" href="../css/styles.css" />
+  <script src="https://cdn.jsdelivr.net/npm/pdfjs-dist@3.11.174/build/pdf.min.js"></script>
+  <style>
+    *,*::before,*::after{box-sizing:border-box;}
+    .hidden{display:none !important;}
+    body{background:#00020a;overflow-x:hidden;cursor:auto !important;-webkit-user-select:none;user-select:none;font-family:'Inter',sans-serif;color:#e2e8f0;margin:0;}
+    a,button,input,select,textarea{cursor:pointer !important;}
+    @media print{body{display:none !important;}}
+
+    .exam-bar{position:fixed;top:0;left:0;right:0;z-index:1000;display:flex;align-items:center;gap:16px;padding:0 28px;height:64px;background:rgba(0,2,10,0.97);border-bottom:1px solid rgba(38,183,255,0.10);backdrop-filter:blur(16px);}
+    .exam-bar .logo-sm{height:38px;flex-shrink:0;}
+    .round-badge{font-family:'Orbitron',monospace;font-size:0.62rem;font-weight:800;color:#00020a;background:#26b7ff;padding:5px 14px;border-radius:20px;letter-spacing:0.08em;white-space:nowrap;flex-shrink:0;}
+    .bar-center{flex:1;display:flex;flex-direction:column;align-items:center;gap:1px;}
+    #timer-display{font-family:'Orbitron',monospace;font-size:1.5rem;font-weight:700;color:#26b7ff;letter-spacing:0.06em;line-height:1;}
+    #timer-display.warning{color:#ef4444;animation:blink 1s ease-in-out infinite;}
+    @keyframes blink{0%,100%{opacity:1;}50%{opacity:0.45;}}
+    .progress-text{font-size:0.72rem;color:#64748b;letter-spacing:0.02em;}
+    .team-info{font-size:0.75rem;color:#475569;flex-shrink:0;white-space:nowrap;}
+    .lang-toggle{padding:5px 14px;border-radius:20px;border:1px solid rgba(255,255,255,0.12);background:rgba(255,255,255,0.04);color:#64748b;font-size:0.72rem;font-weight:700;letter-spacing:0.06em;transition:all 180ms;flex-shrink:0;}
+    .lang-toggle:hover{border-color:#26b7ff;color:#26b7ff;}
+
+    .r2-layout{display:flex;margin-top:64px;height:calc(100vh - 64px);overflow:hidden;}
+
+    .r2-pdf-panel{flex:1;min-width:0;overflow-y:auto;padding:24px 20px;display:flex;flex-direction:column;align-items:center;gap:16px;border-right:1px solid rgba(255,255,255,0.05);}
+    .r2-pdf-panel::-webkit-scrollbar{width:5px;}
+    .r2-pdf-panel::-webkit-scrollbar-thumb{background:rgba(38,183,255,0.2);border-radius:4px;}
+    .r2-pdf-page canvas{display:block;border:1px solid rgba(255,255,255,0.06);border-radius:10px;max-width:100%;height:auto;box-shadow:0 4px 24px rgba(0,0,0,0.4);}
+    .r2-loading{display:flex;align-items:center;justify-content:center;min-height:60vh;color:#475569;font-size:0.88rem;letter-spacing:0.02em;}
+    .r2-pdf-lock-overlay{position:absolute;inset:0;z-index:10;background:transparent;}
+
+    .r2-questions-panel{width:400px;max-width:100%;flex-shrink:0;display:flex;flex-direction:column;overflow-x:hidden;background:rgba(3,5,15,0.7);}
+
+    .r2-tabs-header{display:flex;flex-wrap:wrap;gap:2px;padding:12px 14px 0;border-bottom:1px solid rgba(255,255,255,0.06);background:rgba(0,2,10,0.7);flex-shrink:0;width:100%;box-sizing:border-box;}
+    .r2-tab-btn{position:relative;padding:8px 0 10px;min-width:34px;border:none;background:none;cursor:pointer;font-family:'Orbitron',monospace;font-size:0.58rem;font-weight:700;color:#334155;letter-spacing:0.04em;transition:color 180ms;text-align:center;}
+    .r2-tab-btn::after{content:'';position:absolute;bottom:-1px;left:2px;right:2px;height:2px;border-radius:2px 2px 0 0;background:transparent;transition:background 180ms;}
+    .r2-tab-btn:hover{color:#94a3b8;}
+    .r2-tab-btn.active{color:#26b7ff;}
+    .r2-tab-btn.active::after{background:#26b7ff;}
+    .r2-tab-btn.tab-done{color:#22c55e;}
+    .r2-tab-btn.tab-done.active{color:#22c55e;}
+    .r2-tab-btn.tab-done.active::after{background:#22c55e;}
+    .tab-dot{display:block;width:5px;height:5px;border-radius:50%;background:#22c55e;margin:0 auto 4px;opacity:0;transition:opacity 180ms;}
+    .r2-tab-btn.tab-done .tab-dot{opacity:1;}
+
+    .r2-tab-body{flex:1;overflow-y:auto;overflow-x:hidden;padding:20px;box-sizing:border-box;width:100%;}
+    .r2-tab-body::-webkit-scrollbar{width:5px;}
+    .r2-tab-body::-webkit-scrollbar-thumb{background:rgba(38,183,255,0.12);border-radius:4px;}
+
+    .r2-progress-bar{height:2px;background:rgba(255,255,255,0.05);border-radius:2px;overflow:hidden;margin-bottom:22px;}
+    .r2-progress-fill{height:100%;background:#22c55e;border-radius:2px;transition:width 400ms ease;}
+
+    .r2-q-card{display:none;flex-direction:column;gap:16px;animation:fadeSlide 200ms ease;width:100%;box-sizing:border-box;}
+    .r2-q-card.active{display:flex;}
+    @keyframes fadeSlide{from{opacity:0;transform:translateY(5px);}to{opacity:1;transform:translateY(0);}}
+
+    .r2-q-header{display:flex;align-items:flex-start;justify-content:space-between;gap:8px;flex-wrap:wrap;width:100%;}
+    .r2-q-number{font-family:'Orbitron',monospace;font-size:0.62rem;font-weight:800;color:#26b7ff;letter-spacing:0.06em;white-space:normal;word-break:break-word;}
+    .r2-q-badges{display:flex;gap:6px;flex-wrap:wrap;margin-left:auto;max-width:100%;justify-content:flex-end;}
+    .r2-q-badge{font-size:0.6rem;font-weight:700;padding:3px 8px;border-radius:10px;white-space:normal;word-break:break-word;max-width:100%;line-height:1.3;}
+    .r2-q-badge.unit{background:rgba(38,183,255,0.08);color:#26b7ff;border:1px solid rgba(38,183,255,0.18);}
+    .r2-q-badge.tol{background:rgba(255,255,255,0.04);color:#475569;border:1px solid rgba(255,255,255,0.07);}
+
+    .r2-q-note{font-size:0.8rem;color:#94a3b8;line-height:1.65;padding:12px 14px;border-radius:10px;background:rgba(255,255,255,0.02);border:1px solid rgba(255,255,255,0.05);word-break:break-word;overflow-wrap:break-word;box-sizing:border-box;width:100%;}
+
+    .r2-q-input-row{display:flex;gap:10px;align-items:stretch;}
+    .r2-q-input{flex:1;padding:12px 16px;border-radius:10px;border:1px solid rgba(255,255,255,0.08);background:rgba(255,255,255,0.03);color:#e2e8f0;font-size:0.9rem;font-family:'Courier New',monospace;outline:none;transition:border-color 180ms,box-shadow 180ms;}
+    .r2-q-input:focus{border-color:rgba(38,183,255,0.45);box-shadow:0 0 0 3px rgba(38,183,255,0.07);}
+    .r2-q-input:disabled{opacity:0.45;cursor:default;}
+    .r2-q-submit{padding:12px 20px;border-radius:10px;border:none;background:#26b7ff;color:#00020a;font-weight:800;font-size:0.78rem;letter-spacing:0.04em;white-space:nowrap;transition:background 180ms,transform 100ms;}
+    .r2-q-submit:hover:not(:disabled){background:#4dc8ff;}
+    .r2-q-submit:active:not(:disabled){transform:scale(0.97);}
+    .r2-q-submit:disabled{opacity:0.3;cursor:default;}
+
+    .r2-q-locked{display:flex;flex-direction:column;gap:6px;padding:16px;border-radius:10px;background:rgba(34,197,94,0.05);border:1px solid rgba(34,197,94,0.14);}
+    .r2-q-locked-label{font-size:0.58rem;font-weight:800;color:#22c55e;letter-spacing:0.1em;text-transform:uppercase;}
+    .r2-q-locked-value{font-family:'Courier New',monospace;font-size:1.2rem;font-weight:700;color:#e2e8f0;}
+    .r2-q-locked-by{font-size:0.7rem;color:#475569;}
+
+    .r2-gate{display:flex;align-items:center;justify-content:center;min-height:100vh;text-align:center;padding:40px;flex-direction:column;gap:12px;}
+    .r2-gate h1{font-size:1.8rem;margin:0;}
+    .r2-gate p{color:#475569;font-size:0.92rem;margin:0;}
+    .r2-gate .gate-timer{font-family:'Orbitron',monospace;font-size:2rem;font-weight:700;color:#26b7ff;letter-spacing:0.06em;margin-top:8px;}
+
+    .exam-toast{position:fixed;top:80px;left:50%;transform:translateX(-50%);z-index:99999;max-width:440px;width:90%;padding:13px 18px;border-radius:12px;background:rgba(3,5,15,0.97);border:1px solid rgba(239,68,68,0.25);backdrop-filter:blur(16px);display:none;align-items:center;gap:12px;font-size:0.82rem;color:#ef4444;box-shadow:0 8px 40px rgba(0,0,0,0.6);}
+    .exam-toast.success{border-color:rgba(34,197,94,0.3);color:#22c55e;}
+    .exam-toast.show{display:flex;animation:toastIn 260ms cubic-bezier(.34,1.56,.64,1);}
+    @keyframes toastIn{from{opacity:0;transform:translateX(-50%) translateY(-12px) scale(0.96);}to{opacity:1;transform:translateX(-50%) translateY(0) scale(1);}}
+    .toast-close{margin-left:auto;background:none;border:none;color:inherit;font-size:1.1rem;opacity:0.55;padding:0 2px;cursor:pointer;}
+    .toast-close:hover{opacity:1;}
+
+    .r2-confirm-overlay{position:fixed;inset:0;z-index:9999;background:rgba(0,2,10,0.78);backdrop-filter:blur(8px);display:flex;align-items:center;justify-content:center;padding:20px;opacity:0;pointer-events:none;transition:opacity 200ms ease;}
+    .r2-confirm-overlay.open{opacity:1;pointer-events:all;}
+    .r2-confirm-box{background:#050814;border:1px solid rgba(255,255,255,0.08);border-radius:18px;padding:32px 28px;max-width:360px;width:100%;box-shadow:0 32px 80px rgba(0,0,0,0.75);transform:translateY(10px) scale(0.97);transition:transform 220ms cubic-bezier(.34,1.56,.64,1);}
+    .r2-confirm-overlay.open .r2-confirm-box{transform:translateY(0) scale(1);}
+    .r2-confirm-label{font-size:0.58rem;font-weight:800;color:#475569;letter-spacing:0.12em;text-transform:uppercase;margin-bottom:16px;}
+    .r2-confirm-qnum{font-family:'Orbitron',monospace;font-size:0.6rem;font-weight:700;color:#26b7ff;margin-bottom:5px;}
+    .r2-confirm-value{font-family:'Courier New',monospace;font-size:1.6rem;font-weight:700;color:#e2e8f0;margin-bottom:3px;}
+    .r2-confirm-unit{font-size:0.76rem;color:#475569;margin-bottom:20px;}
+    .r2-confirm-warning{font-size:0.77rem;color:#64748b;line-height:1.65;padding:11px 14px;background:rgba(255,255,255,0.02);border-radius:8px;border:1px solid rgba(255,255,255,0.05);margin-bottom:22px;}
+    .r2-confirm-actions{display:flex;gap:10px;}
+    .r2-confirm-cancel{flex:1;padding:11px;border-radius:10px;border:1px solid rgba(255,255,255,0.09);background:rgba(255,255,255,0.03);color:#64748b;font-size:0.8rem;font-weight:600;transition:all 180ms;}
+    .r2-confirm-cancel:hover{border-color:rgba(255,255,255,0.2);color:#94a3b8;}
+    .r2-confirm-submit{flex:2;padding:11px;border-radius:10px;border:none;background:#26b7ff;color:#00020a;font-size:0.8rem;font-weight:800;letter-spacing:0.04em;transition:background 180ms,transform 100ms;}
+    .r2-confirm-submit:hover{background:#4dc8ff;}
+    .r2-confirm-submit:active{transform:scale(0.97);}
+
+    @media(max-width:1024px){
+      .r2-layout{flex-direction:column;}
+      .r2-pdf-panel{height:50vh;border-right:none;border-bottom:1px solid rgba(255,255,255,0.05);}
+      .r2-questions-panel{width:100%;height:50vh;}
+    }
+    @media(max-width:768px){
+      .exam-bar{padding:0 12px;height:56px;gap:8px;}
+      .exam-bar .logo-sm{height:28px;}
+      .round-badge{font-size:0.55rem;padding:4px 8px;}
+      #timer-display{font-size:1.15rem;}
+      .progress-text{font-size:0.65rem;}
+      .team-info{display:none;}
+      .lang-toggle{padding:4px 10px;font-size:0.68rem;}
+      .r2-layout{margin-top:56px;height:calc(100vh - 56px);}
+      .r2-pdf-panel{height:46vh;padding:12px 8px;}
+      .r2-questions-panel{height:54vh;}
+      .r2-tabs-header{padding:8px 8px 0;overflow-x:auto;flex-wrap:nowrap;-webkit-overflow-scrolling:touch;}
+      .r2-tab-btn{min-width:32px;padding:6px 2px 8px;font-size:0.55rem;flex-shrink:0;}
+      .r2-tab-body{padding:14px 12px;}
+      .r2-q-header{flex-wrap:wrap;gap:6px;}
+      .r2-q-input-row{gap:8px;}
+      .r2-q-input{padding:10px 12px;font-size:0.85rem;}
+      .r2-q-submit{padding:10px 14px;font-size:0.75rem;}
+      .r2-gate{padding:20px 12px;}
+      .r2-gate > div{padding:20px 14px !important;}
+      .r2-gate h1{font-size:1.35rem;}
+      .r2-confirm-box{padding:22px 16px;max-width:92%;}
+      .r2-confirm-value{font-size:1.25rem;}
+    }
+
+    .r2-q-input-tip{font-size:0.74rem;color:#94a3b8;line-height:1.5;background:rgba(38,183,255,0.04);border:1px solid rgba(38,183,255,0.12);border-radius:8px;padding:8px 12px;box-sizing:border-box;}
+    .hl-code{font-family:'Courier New',monospace;background:rgba(38,183,255,0.14);color:#38bdf8;padding:2px 6px;border-radius:4px;font-weight:700;font-size:0.8rem;}
+    .r2-format-guide{margin-top:16px;padding:14px 16px;background:rgba(15,23,42,0.65);border:1px solid rgba(255,255,255,0.07);border-radius:12px;font-size:0.78rem;color:#94a3b8;line-height:1.6;}
+    .r2-format-guide-title{font-size:0.8rem;font-weight:700;color:#e2e8f0;margin-bottom:6px;display:flex;align-items:center;gap:6px;}
+    .r2-format-guide-body{display:flex;flex-direction:column;gap:4px;}
+
+  </style>
+</head>
+<body>
+
+  <div class="exam-bar">
+    <img class="logo-sm" src="../images/GAAC_Final_logo_without_BG-removebg-preview.png" alt="GAAC" />
+    <span class="round-badge" id="round-badge">...</span>
+    <div class="bar-center">
+      <div id="timer-display">--:--</div>
+      <div class="progress-text"><span id="answered-count">0</span> / <span id="total-count">0</span> submitted</div>
+    </div>
+    <span class="team-info" id="team-info"></span>
+    <button id="btn-admin-reset" class="lang-toggle" style="background:rgba(239,68,68,0.18);border-color:rgba(239,68,68,0.45);color:#ff6b7a;display:none;margin-right:4px;" title="Reset answers & timer for this admin session">Reset Exam (Admin)</button>
+    <a href="team-dashboard.html" class="lang-toggle" style="text-decoration:none;">Dashboard</a>
+  </div>
+
+  <div class="r2-layout">
+    <div class="r2-pdf-panel" id="pdf-panel">
+      <div class="r2-loading" id="pdf-loading">Loading question paper...</div>
+    </div>
+    <div class="r2-questions-panel" id="questions-panel">
+      <div class="r2-tabs-header" id="tabs-header"></div>
+      <div class="r2-tab-body" id="tab-body">
+        <div class="r2-progress-bar">
+          <div class="r2-progress-fill" id="progress-fill" style="width:0%"></div>
+        </div>
+        <div id="questions-container"></div>
+        <div class="r2-format-guide">
+          <div class="r2-format-guide-title">
+            <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="#26b7ff" stroke-width="2"><circle cx="12" cy="12" r="10"></circle><line x1="12" y1="16" x2="12" y2="12"></line><line x1="12" y1="8" x2="12.01" y2="8"></line></svg>
+            Numerical Format &amp; Precision Guide
+          </div>
+          <div class="r2-format-guide-body">
+            <div>&bull; <strong>Scientific Notation:</strong> For large or small powers of 10, write in standard exponential notation: e.g. <strong>2.335 &times; 10²²</strong> &rarr; <code class="hl-code">2.335e22</code> (or <strong>1.5 &times; 10⁻⁴</strong> &rarr; <code class="hl-code">1.5e-4</code>).</div>
+            <div>&bull; <strong>Significant Figures &amp; Tolerance:</strong> Standard significant figures and rounding are evaluated automatically within the <strong>&plusmn;1% error tolerance</strong>.</div>
+            <div>&bull; <strong>Pure Numbers:</strong> Do not type unit strings (e.g. <code>km/s</code>) into the input box — units are fixed per question.</div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <div id="gate-screen" class="r2-gate hidden">
+    <h1 id="gate-title">Round Not <span class="text-blue">Available</span></h1>
+    <p id="gate-msg">The current round has not started yet.</p>
+    <div class="gate-timer" id="gate-timer"></div>
+    <p id="gate-sub"></p>
+    <a href="team-dashboard" class="button secondary" style="margin-top: 16px; text-decoration: none;">Back to Dashboard</a>
+  </div>
+
+  <div id="rules-gate" class="r2-gate hidden">
+    <div style="max-width: 620px; width: 100%; background: rgba(10, 14, 23, 0.92); border: 1px solid rgba(38,183,255,0.25); border-radius: 16px; padding: 32px 28px; text-align: left; box-shadow: 0 16px 48px rgba(0,0,0,0.6); backdrop-filter: blur(16px);">
+      <div style="text-align:center; margin-bottom: 20px;">
+        <img src="../images/GAAC_Final_logo_without_BG-removebg-preview.png" alt="GAAC" style="height: 52px; margin-bottom: 8px;" />
+        <h1 style="font-size: 1.35rem; margin: 0; color: #ffffff;" id="rules-gate-title">Semi-Finals — <span style="color:#26b7ff;">Round 2 (Final Four)</span></h1>
+        <p style="color: #94a3b8; font-size: 0.85rem; margin-top: 4px;" id="rules-gate-sub">GAAC 2026 Knockout Stage (Places 1–4)</p>
+      </div>
+
+      <div style="background: rgba(255, 71, 87, 0.08); border: 1px solid rgba(255, 71, 87, 0.35); border-radius: 12px; padding: 14px 16px; margin-bottom: 18px;">
+        <div style="color: #ff6b7a; font-weight: 700; font-size: 0.88rem; display: flex; align-items: center; gap: 8px;">
+          STRICT BAN ON MOBILE PHONES
+        </div>
+        <p style="color: #fda4af; font-size: 0.8rem; margin: 6px 0 0; line-height: 1.5;">
+          The use of mobile phones or auxiliary communication devices during the exam is strictly prohibited. Any unauthorized device usage detected by Zoom proctors will result in <strong>immediate and permanent disqualification</strong>.
+        </p>
+      </div>
+
+      <div style="background: rgba(255,255,255,0.03); border: 1px solid rgba(255,255,255,0.08); border-radius: 12px; padding: 16px; margin-bottom: 20px; font-size: 0.84rem; color: #cbd5e1; line-height: 1.7;">
+        <div><strong>Duration:</strong> 1 Hour (60:00 minutes) synchronized timer.</div>
+        <div><strong>Questions:</strong> 10 numerical questions based on the question paper.</div>
+        <div><strong>Units:</strong> Input your answer in the specified unit indicated for each question.</div>
+        <div><strong>Scientific Notation:</strong> Use exponential format for powers of 10 (e.g. <code>2.335e22</code>). Sig figures within &plusmn;1% tolerance are accepted.</div>
+        <div><strong>One Attempt Only:</strong> Answers once locked cannot be modified. No scores or correctness are shown.</div>
+        <div><strong>Live Proctoring:</strong> Supervised live via Zoom. Keep your camera on throughout the exam.</div>
+      </div>
+
+      <label style="display: flex; align-items: flex-start; gap: 10px; font-size: 0.82rem; color: #e2e8f0; cursor: pointer; margin-bottom: 22px; user-select: none;">
+        <input type="checkbox" id="rules-agree-cb" style="margin-top: 3px; cursor: pointer; accent-color: #26b7ff; width: 16px; height: 16px;" />
+        <span>I have read, understood, and agreed to all competition rules and declare I am ready to begin.</span>
+      </label>
+
+      <button type="button" id="btn-start-exam" class="button primary" style="width: 100%; justify-content: center; padding: 13px; font-weight: 700; font-size: 0.95rem; opacity: 0.4; cursor: not-allowed;" disabled>
+        Start 1-Hour Exam
+      </button>
+    </div>
+  </div>
+
+  <div id="completed-gate" class="r2-gate hidden">
+    <div style="max-width: 500px; width: 100%; background: rgba(10, 14, 23, 0.92); border: 1px solid rgba(34,197,94,0.3); border-radius: 16px; padding: 36px 28px; text-align: center; box-shadow: 0 16px 48px rgba(0,0,0,0.6);">
+      <h1 style="font-size: 1.4rem; color: #22c55e; margin: 0 0 8px;">Exam Completed</h1>
+      <p style="color: #94a3b8; font-size: 0.88rem; line-height: 1.6; margin: 0 0 24px;">Your Round of 8 answers have been successfully submitted and recorded. Evaluation is conducted by the GAAC academic committee.</p>
+      <a href="team-dashboard" class="button primary" style="justify-content: center; text-decoration: none; display: inline-flex;">Return to Dashboard</a>
+    </div>
+  </div>
+
+  <div class="exam-toast" id="toast">
+    <span id="toast-msg"></span>
+    <button class="toast-close" onclick="document.getElementById('toast').classList.remove('show','success')">&times;</button>
+  </div>
+
+  <div class="r2-confirm-overlay" id="confirm-modal">
+    <div class="r2-confirm-box">
+      <div class="r2-confirm-label">Confirm Submission</div>
+      <div class="r2-confirm-qnum" id="confirm-qnum">Q-</div>
+      <div class="r2-confirm-value" id="confirm-value">-</div>
+      <div class="r2-confirm-unit" id="confirm-unit"></div>
+      <div class="r2-confirm-warning">This answer will be permanently saved and locked for your team. It cannot be changed after submission.</div>
+      <div class="r2-confirm-actions">
+        <button class="r2-confirm-cancel" id="btn-confirm-no">Cancel</button>
+        <button class="r2-confirm-submit" id="btn-confirm-yes">Confirm &amp; Lock</button>
+      </div>
+    </div>
+  </div>
+
+  <script>
+    (function () {
+      var errPill = function (msg) {
+        try {
+          var el = document.getElementById('js-err-pill');
+          if (!el) {
+            el = document.createElement('div');
+            el.id = 'js-err-pill';
+            el.style.cssText = 'position:fixed;bottom:12px;left:12px;z-index:99999;background:#ff6b6b;color:#fff;font:500 12px/1.55 system-ui,sans-serif;padding:10px 14px;border-radius:10px;max-width:92%;box-shadow:0 8px 24px rgba(0,0,0,0.5);white-space:pre-wrap;';
+            document.body.appendChild(el);
+          }
+          el.textContent = (el.textContent ? el.textContent + '\n' : '') + 'JS: ' + msg;
+        } catch (_) {}
+      };
+      window.addEventListener('error', function (e) {
+        var m = (e && e.message) || 'unknown error';
+        if (e && e.filename) m += ' @ ' + e.filename.split('/').pop() + ':' + (e.lineno || '?');
+        errPill(m);
+      });
+      window.addEventListener('unhandledrejection', function (e) {
+        var r = e && e.reason;
+        var m = (r && r.message) || (typeof r === 'string' ? r : (r ? String(r).slice(0, 200) : 'rejection'));
+        errPill('PROMISE: ' + m);
+      });
+    })();
+  </script>
+  <script type="module" src="../js/round2-app.js"></script></body>
+</html>
