@@ -33,25 +33,17 @@ The platform is structured into four primary modules:
 
 ```
 GAAC/
-├── index.html                  # Main landing page
-├── register.html               # Team registration portal
-├── team-dashboard.html         # Team roster and exam launchpad
-├── exam.html                   # Core Round 1 proctored exam interface
-├── mock-exam.html              # Practice exam environment
-├── round2.html                 # Round 2 stage interface
-├── leaderboard.html            # Public tournament rankings
-├── certificate.html            # Certificate search and generator
-├── ambassador*.html            # Ambassador registration, login, and dashboard
-├── admin-*.html                # Admin monitoring, question manager, and audit tools
-├── js/
-│   ├── exam-app.js             # Exam lifecycle, timers, and submission handlers
-│   ├── ai-monitor.js           # MediaPipe proctoring and event tracking
-│   ├── security.js             # Fullscreen, tab switch, and focus protection
-│   └── registration.js         # Firebase Auth and Firestore team ingestion
-├── css/                        # Responsive stylesheets and themes
-├── pdf/                        # Competition structure, syllabus, and sample papers
+├── *.html                      # Application entry points and portals
+├── css/                        # Responsive stylesheets and design systems
+├── js/                         # Frontend application logic, security, and proctoring
+├── data/                       # Official tournament rankings and static datasets
+├── docs/                       # Comprehensive platform architecture and system overview
+├── scripts/                    # Automation scripts and integrations
+├── images/                     # Partner branding, assets, and tournament visuals
+├── pdf/                        # Competition structure, syllabus, and papers
 ├── functions/                  # Cloud Functions for scoring, resets, and exports
-└── firestore.rules             # Granular database security rules
+├── firestore.rules             # Granular database security rules
+└── README.md
 ```
 
 ---

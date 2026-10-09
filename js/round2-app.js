@@ -491,7 +491,7 @@ const init = async () => {
   }
 };
 
-let localPdfFallback = 'round2-fin-questions.pdf';
+let localPdfFallback = 'pdf/round2-fin-questions.pdf';
 
 const setupStageEnvironment = (stage) => {
   const rulesTitle = document.getElementById('rules-gate-title');
@@ -501,7 +501,7 @@ const setupStageEnvironment = (stage) => {
     stageKey = 'fin';
     stageName = 'GRAND FINAL (1st–2nd)';
     pdfStoragePath = 'round2/fin/questions.pdf';
-    localPdfFallback = 'round2-fin-questions.pdf';
+    localPdfFallback = 'pdf/round2-fin-questions.pdf';
     r2Questions = FIN_QUESTIONS;
     activeQid = 'fin_q1';
     if (rulesTitle) rulesTitle.innerHTML = 'Grand Final — <span style="color:#26b7ff;">Championship Match</span>';
@@ -510,7 +510,7 @@ const setupStageEnvironment = (stage) => {
     stageKey = 'sf';
     stageName = 'SEMI-FINALS';
     pdfStoragePath = 'round2/sf/questions.pdf';
-    localPdfFallback = 'round2-sf-questions.pdf';
+    localPdfFallback = 'pdf/round2-sf-questions.pdf';
     r2Questions = SF_QUESTIONS;
     activeQid = 'sf_q1';
     if (rulesTitle) rulesTitle.innerHTML = 'Semi-Finals — <span style="color:#26b7ff;">Round 2 (Final Four)</span>';
@@ -519,7 +519,7 @@ const setupStageEnvironment = (stage) => {
     stageKey = 'r8';
     stageName = 'ROUND OF 8 (5th–8th)';
     pdfStoragePath = 'round2/r8/questions.pdf';
-    localPdfFallback = 'round2-r8-questions.pdf';
+    localPdfFallback = 'pdf/round2-r8-questions.pdf';
     r2Questions = R8_QUESTIONS;
     activeQid = 'r8_q1';
     if (rulesTitle) rulesTitle.innerHTML = 'Round of 8 — <span style="color:#26b7ff;">Last Chance Qualifier</span>';

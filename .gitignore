@@ -14,6 +14,7 @@ auth-export.json
 all-registered-emails.txt
 GAAC-2026-data/
 deploy-*.log
+*.log
 # Dev-only dummy questions/answers for Round 1 — real questions are served from
 # the server function (getRound1Questions) and real answers live in Firestore
 # admin-only. These MUST never reach the public repo.
@@ -41,4 +42,6 @@ pdf/questions*
 Round2*
 *Round2*
 outputs/
+scratch/
+certificates/GAAC-2026_Certificate_*
 
