@@ -33,7 +33,8 @@ The platform is structured into four primary modules:
 
 ```
 GAAC/
-├── *.html                      # Application entry points and portals
+├── index.html                  # Main homepage entry point
+├── pages/                      # Application portals and examination interfaces
 ├── css/                        # Responsive stylesheets and design systems
 ├── js/                         # Frontend application logic, security, and proctoring
 ├── data/                       # Official tournament rankings and static datasets
